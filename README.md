@@ -4,8 +4,27 @@ Aplicacion web para gestionar devoluciones, evidencias, reportes de carga y fluj
 
 El proyecto utiliza Next.js y Supabase para implementar una aplicacion operativa con trazabilidad, almacenamiento privado de evidencias, Row Level Security (RLS), RPC protegidas y verificaciones automatizadas de permisos.
 
-## Funcionalidades
+<!-- DDEVOLUCIONES_SCREENSHOTS_START -->
 
+## Vista previa
+
+### Dashboard
+
+![Dashboard de DDevoluciones](docs/images/dashboard.png)
+
+### Pantallas principales
+
+| Inicio de sesion | Devoluciones |
+|---|---|
+| ![Login de DDevoluciones](docs/images/login.png) | ![Modulo de devoluciones](docs/images/devoluciones.png) |
+
+| Reporte de carga | Usuarios |
+|---|---|
+| ![Reporte de carga](docs/images/reportes-carga.png) | ![Administracion de usuarios](docs/images/usuarios.png) |
+
+<!-- DDEVOLUCIONES_SCREENSHOTS_END -->
+
+## Funcionalidades
 - Registro y seguimiento de devoluciones.
 - Flujos independientes para Pesado y Almacen.
 - Clasificacion de material bueno, malo o mixto.
