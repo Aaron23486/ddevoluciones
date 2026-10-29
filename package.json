@@ -10,7 +10,6 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "seed:demo-users": "node scripts/seed-demo-users.mjs",
     "verify:demo-login": "node scripts/verify-demo-login.mjs",
     "verify:devoluciones": "node scripts/verify-devoluciones.mjs",
     "verify:reportes-carga": "node scripts/verify-reportes-carga.mjs",
@@ -21,7 +20,10 @@
     "db:down": "supabase stop",
     "db:reset": "supabase db reset",
     "db:status": "supabase status",
-    "env:local": "node scripts/env-local.mts"
+    "env:local": "node scripts/env-local.mts",
+    "demo:setup": "node scripts/demo-setup.mts",
+    "create-admin": "node scripts/users.mts create --role admin",
+    "users": "node scripts/users.mts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
