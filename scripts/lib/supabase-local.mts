@@ -104,3 +104,88 @@ export async function signedInClient(
   }
   return client;
 }
+
+export type AuthAccount = { id: string; email: string };
+
+// La API de administración de Auth lista las cuentas por páginas.
+export async function findAccountByEmail(
+  admin: SupabaseClient,
+  email: string,
+): Promise<AuthAccount | null> {
+  const wanted = email.toLowerCase();
+  for (let page = 1; ; page++) {
+    const { data, error } = await admin.auth.admin.listUsers({
+      page,
+      perPage: 200,
+    });
+    if (error) {
+      throw new Error(`No fue posible consultar las cuentas: ${error.message}`);
+    }
+    const match = data.users.find(
+      (user) => user.email?.toLowerCase() === wanted,
+    );
+    if (match) return { id: match.id, email: match.email ?? email };
+    if (data.users.length < 200) return null;
+  }
+}
+
+// Cambia la contraseña con la API de administración de Auth (clave secreta).
+export async function setPassword(
+  admin: SupabaseClient,
+  userId: string,
+  password: string,
+): Promise<void> {
+  const { error } = await admin.auth.admin.updateUserById(userId, {
+    password,
+  });
+  if (error) {
+    throw new Error(`No fue posible cambiar la contraseña: ${error.message}`);
+  }
+}
+
+export const ROLES = [
+  "admin",
+  "devoluciones",
+  "pesado",
+  "inventario",
+  "almacen",
+  "transportes",
+  "seguridad",
+] as const;
+export type Role = (typeof ROLES)[number];
+
+export type ProfileAccess = { role: Role; active: boolean };
+
+// Fija rol y estado del perfil. La base rechaza dejar el sistema sin un admin activo
+// y registra el cambio en profile_access_events.
+export async function setProfileAccess(
+  admin: SupabaseClient,
+  userId: string,
+  access: ProfileAccess,
+): Promise<boolean> {
+  const { data: current, error: readError } = await admin
+    .from("profiles")
+    .select("role, is_active")
+    .eq("id", userId)
+    .maybeSingle();
+  if (readError || !current) {
+    throw new Error("La cuenta no tiene perfil en public.profiles.");
+  }
+  if (current.role === access.role && current.is_active === access.active) {
+    return false;
+  }
+
+  const { error } = await admin
+    .from("profiles")
+    .update({ role: access.role, is_active: access.active })
+    .eq("id", userId);
+  if (error) {
+    if (error.message.includes("LAST_ADMIN_REQUIRED")) {
+      throw new Error("No se puede retirar el último admin activo.");
+    }
+    throw new Error(
+      `No fue posible actualizar el acceso (${error.code ?? "sin código"}).`,
+    );
+  }
+  return true;
+}

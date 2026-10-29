@@ -34,7 +34,7 @@ describe("demo profiles-only contract", () => {
 
   it("documents and seeds every demo role", () => {
     const readme = source("README.md");
-    const seed = source("scripts/demo-users.mjs");
+    const seed = source("scripts/lib/demo-data.mts");
     for (const role of [
       "admin",
       "devoluciones",
