@@ -7,6 +7,7 @@ import {
   createReporteCargaAction,
   redispatchReporteCargaAction,
 } from "@/features/reportes-carga/actions";
+import { ROUTE_ROLES } from "@/constants/permissions";
 import { requireRole } from "@/lib/auth/require-user";
 import {
   getReportesCargaDetails,
@@ -94,12 +95,7 @@ function paginationItems(
 }
 
 export default async function ReportesCargaPage({ searchParams }: Props) {
-  const profile = await requireRole([
-    "admin",
-    "inventario",
-    "transportes",
-    "seguridad",
-  ]);
+  const profile = await requireRole(ROUTE_ROLES["/reportes-carga"]);
 
   const params = await searchParams;
   const page = Math.max(Number(one(params.page)) || 1, 1);

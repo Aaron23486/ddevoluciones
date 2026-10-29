@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { USER_ROLES, type UserRole } from "@/constants/roles";
+import { getDefaultRoute } from "@/constants/permissions";
+import { isUserRole, type UserRole } from "@/constants/roles";
 
 export type ActiveProfile = {
   id: string;
@@ -9,10 +10,6 @@ export type ActiveProfile = {
   role: UserRole;
   is_active: true;
 };
-
-function isUserRole(value: unknown): value is UserRole {
-  return typeof value === "string" && USER_ROLES.includes(value as UserRole);
-}
 
 export async function requireActiveProfile(): Promise<ActiveProfile> {
   const supabase = await createClient();
@@ -49,7 +46,7 @@ export async function requireRole(
   const profile = await requireActiveProfile();
 
   if (!allowedRoles.includes(profile.role)) {
-    redirect("/dashboard?error=forbidden");
+    redirect(`${getDefaultRoute(profile.role)}?error=forbidden`);
   }
 
   return profile;

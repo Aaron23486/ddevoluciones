@@ -1,45 +1,32 @@
 import type { UserRole } from "@/constants/roles";
 
-export const APP_VIEWS = [
-  "dashboard",
-  "devoluciones",
-  "recepcion",
-  "inventario",
-  "ubicacion",
-  "disposicion",
-  "reportes",
-  "reportes-carga",
-  "usuarios",
+// Única fuente de acceso por ruta: la usan las páginas (requireRole),
+// la navegación y la redirección después del login. La autoridad final
+// sigue siendo la base de datos (RLS y RPC).
+export const APP_ROUTES = [
+  "/dashboard",
+  "/devoluciones",
+  "/reportes-carga",
+  "/usuarios",
 ] as const;
 
-export type AppView = (typeof APP_VIEWS)[number];
+export type AppRoute = (typeof APP_ROUTES)[number];
 
-export const ROLE_VIEWS: Record<UserRole, readonly AppView[]> = {
-  admin: [
-    "dashboard",
-    "devoluciones",
-    "recepcion",
-    "inventario",
-    "ubicacion",
-    "disposicion",
-    "reportes",
-    "reportes-carga",
-    "usuarios",
-  ],
-
-  devoluciones: ["devoluciones", "reportes"],
-
-  pesado: ["dashboard", "recepcion", "ubicacion"],
-
-  inventario: ["dashboard", "inventario", "disposicion", "reportes-carga"],
-
-  almacen: ["dashboard", "ubicacion"],
-
-  transportes: ["reportes-carga"],
-
-  seguridad: ["reportes-carga"],
+export const ROUTE_ROLES: Record<AppRoute, readonly UserRole[]> = {
+  "/dashboard": ["admin", "devoluciones", "pesado", "inventario", "almacen"],
+  "/devoluciones": ["admin", "devoluciones", "pesado", "inventario", "almacen"],
+  "/reportes-carga": ["admin", "inventario", "transportes", "seguridad"],
+  "/usuarios": ["admin"],
 };
 
-export function canAccessView(role: UserRole, view: AppView): boolean {
-  return ROLE_VIEWS[role].includes(view);
+export function canAccessRoute(role: UserRole, route: AppRoute): boolean {
+  return ROUTE_ROLES[route].includes(role);
+}
+
+export function getAllowedRoutes(role: UserRole): AppRoute[] {
+  return APP_ROUTES.filter((route) => canAccessRoute(role, route));
+}
+
+export function getDefaultRoute(role: UserRole): AppRoute {
+  return getAllowedRoutes(role)[0] ?? "/dashboard";
 }
