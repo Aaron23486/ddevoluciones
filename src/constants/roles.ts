@@ -1,4 +1,4 @@
-﻿export const USER_ROLES = [
+export const USER_ROLES = [
   "admin",
   "devoluciones",
   "pesado",
@@ -17,5 +17,4 @@ export const REQUESTABLE_ROLES = [
   "almacen",
 ] as const;
 
-export type RequestableRole =
-  (typeof REQUESTABLE_ROLES)[number];
+export type RequestableRole = (typeof REQUESTABLE_ROLES)[number];

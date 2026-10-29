@@ -57,9 +57,7 @@ export default async function DashboardPage({ searchParams }: Props) {
         <div>
           <span className="dx-kicker">Resumen de trabajo</span>
           <h1>Dashboard</h1>
-          <p>
-            Acceso rapido a las tareas visibles para el rol {profile.role}.
-          </p>
+          <p>Acceso rapido a las tareas visibles para el rol {profile.role}.</p>
         </div>
 
         <Link href="/devoluciones" className="dx-hero-link">
@@ -92,8 +90,8 @@ export default async function DashboardPage({ searchParams }: Props) {
       <section className="dx-dashboard-panel dv-glass">
         <h2>Operacion consolidada</h2>
         <p>
-          Las acciones correspondientes al rol se encuentran dentro de cada
-          caso en Devoluciones.
+          Las acciones correspondientes al rol se encuentran dentro de cada caso
+          en Devoluciones.
         </p>
 
         <Link href="/devoluciones" className="dx-detail-link">

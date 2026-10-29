@@ -174,9 +174,7 @@ export async function getDevolucionFilteredCount(input: {
   const search = input.search?.trim();
 
   if (search) {
-    const escaped = search
-      .replaceAll("\\", "\\\\")
-      .replaceAll('"', '\\"');
+    const escaped = search.replaceAll("\\", "\\\\").replaceAll('"', '\\"');
 
     query = query.or(
       `factura.ilike."%${escaped}%",articulo.ilike."%${escaped}%"`,

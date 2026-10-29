@@ -1,8 +1,5 @@
 export type OperationalBucket =
-  | "entrada"
-  | "en_proceso"
-  | "pendiente_accion"
-  | "resuelto";
+  "entrada" | "en_proceso" | "pendiente_accion" | "resuelto";
 
 export function devolucionBucket(state: string): OperationalBucket {
   if (state === "cerrada") return "resuelto";

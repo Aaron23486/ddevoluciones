@@ -17,12 +17,9 @@ type LoginPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default async function LoginPage({
-  searchParams,
-}: LoginPageProps) {
+export default async function LoginPage({ searchParams }: LoginPageProps) {
   const params = await searchParams;
-  const error =
-    typeof params.error === "string" ? params.error : undefined;
+  const error = typeof params.error === "string" ? params.error : undefined;
 
   return (
     <main className="dx-login-page">
@@ -61,7 +58,9 @@ export default async function LoginPage({
             <header>
               <span>Bienvenido</span>
               <h2>Iniciar sesion</h2>
-              <p>Inicia sesion con una cuenta creada en tu proyecto Supabase.</p>
+              <p>
+                Inicia sesion con una cuenta creada en tu proyecto Supabase.
+              </p>
             </header>
 
             {error ? (
@@ -106,8 +105,6 @@ export default async function LoginPage({
               </button>
             </form>
           </section>
-
-
         </div>
       </section>
     </main>

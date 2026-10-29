@@ -23,7 +23,10 @@ async function login(email) {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
-  const { data, error } = await client.auth.signInWithPassword({ email, password });
+  const { data, error } = await client.auth.signInWithPassword({
+    email,
+    password,
+  });
   if (error || !data.user) {
     throw new Error(`Login failed ${email}: ${error?.message ?? "no user"}`);
   }
@@ -71,21 +74,25 @@ try {
   const receptionPath = await uploadEvidence(sessions.transportes, "recepcion");
   console.log("OK storage: transportes can upload report evidence");
 
-  await expectRpcFailure(sessions.devoluciones.client, "crear_reporte_carga_ep4", {
-    p_numero_documento: `${run}-FORBIDDEN`,
-    p_factura: null,
-    p_cliente: "Forbidden",
-    p_articulo: "ART-X",
-    p_descripcion_material: null,
-    p_cantidad: 1,
-    p_transportista: null,
-    p_ruta: null,
-    p_placa: null,
-    p_motivo_no_entrega: "Test",
-    p_estado_fisico_carga: "Buen estado",
-    p_observaciones_retorno: null,
-    p_evidencia_path: receptionPath,
-  });
+  await expectRpcFailure(
+    sessions.devoluciones.client,
+    "crear_reporte_carga_ep4",
+    {
+      p_numero_documento: `${run}-FORBIDDEN`,
+      p_factura: null,
+      p_cliente: "Forbidden",
+      p_articulo: "ART-X",
+      p_descripcion_material: null,
+      p_cantidad: 1,
+      p_transportista: null,
+      p_ruta: null,
+      p_placa: null,
+      p_motivo_no_entrega: "Test",
+      p_estado_fisico_carga: "Buen estado",
+      p_observaciones_retorno: null,
+      p_evidencia_path: receptionPath,
+    },
+  );
   console.log("OK permission: devoluciones cannot create Reporte de carga");
 
   reportId = await rpc(sessions.transportes.client, "crear_reporte_carga_ep4", {
@@ -119,16 +126,20 @@ try {
   if (report.placa !== "ABC123") {
     throw new Error(`Expected normalized plate ABC123, got ${report.placa}`);
   }
-  console.log("OK state/history contract: created directly as pendiente_redespacho");
+  console.log(
+    "OK state/history contract: created directly as pendiente_redespacho",
+  );
 
-  const { data: history, error: historyError } = await sessions.transportes.client
-    .from("reportes_carga_historial")
-    .select("accion,estado_anterior,estado_nuevo")
-    .eq("reporte_carga_id", reportId)
-    .order("created_at", { ascending: true });
+  const { data: history, error: historyError } =
+    await sessions.transportes.client
+      .from("reportes_carga_historial")
+      .select("accion,estado_anterior,estado_nuevo")
+      .eq("reporte_carga_id", reportId)
+      .order("created_at", { ascending: true });
 
   if (historyError) throw historyError;
-  if ((history ?? []).length < 2) throw new Error("Expected two creation history rows");
+  if ((history ?? []).length < 2)
+    throw new Error("Expected two creation history rows");
   if (history[0].estado_nuevo !== "recibido_muelle") {
     throw new Error("First history state must be recibido_muelle");
   }
@@ -150,13 +161,19 @@ try {
   );
 
   if (!pendingNotification) {
-    throw new Error("Transportes did not receive pending shipment notification");
+    throw new Error(
+      "Transportes did not receive pending shipment notification",
+    );
   }
   console.log("OK notification: role-targeted pending shipment");
 
-  await rpc(sessions.transportes.client, "mark_internal_notification_read_ep4", {
-    p_notification_id: pendingNotification.id,
-  });
+  await rpc(
+    sessions.transportes.client,
+    "mark_internal_notification_read_ep4",
+    {
+      p_notification_id: pendingNotification.id,
+    },
+  );
 
   const readBack = await rpc(
     sessions.transportes.client,
@@ -164,21 +181,33 @@ try {
     { p_limit: 50 },
   );
 
-  if (!(readBack ?? []).find((item) => item.id === pendingNotification.id)?.is_read) {
+  if (
+    !(readBack ?? []).find((item) => item.id === pendingNotification.id)
+      ?.is_read
+  ) {
     throw new Error("Individual notification read was not persisted");
   }
   console.log("OK notification: individual read");
 
-  await expectRpcFailure(sessions.transportes.client, "redespachar_reporte_carga_ep4", {
-    p_reporte_carga_id: reportId,
-    p_conductor: "Transportes forbidden",
-    p_placa_salida: "TRP001",
-    p_observaciones: "Should fail",
-    p_evidencia_path: receptionPath,
-  });
-  console.log("OK permission: Transportes cannot redispatch in active original policy");
+  await expectRpcFailure(
+    sessions.transportes.client,
+    "redespachar_reporte_carga_ep4",
+    {
+      p_reporte_carga_id: reportId,
+      p_conductor: "Transportes forbidden",
+      p_placa_salida: "TRP001",
+      p_observaciones: "Should fail",
+      p_evidencia_path: receptionPath,
+    },
+  );
+  console.log(
+    "OK permission: Transportes cannot redispatch in active original policy",
+  );
 
-  const redispatchPath = await uploadEvidence(sessions.inventario, "redespacho");
+  const redispatchPath = await uploadEvidence(
+    sessions.inventario,
+    "redespacho",
+  );
 
   await rpc(sessions.inventario.client, "redespachar_reporte_carga_ep4", {
     p_reporte_carga_id: reportId,
@@ -195,9 +224,12 @@ try {
     .single();
 
   if (sentError) throw sentError;
-  if (sent.estado !== "redespachado") throw new Error("Report did not reach redespachado");
-  if (sent.conductor_envio !== "Conductor E4") throw new Error("Driver not stored");
-  if (sent.placa_envio !== "SAL123") throw new Error("Departure plate not normalized");
+  if (sent.estado !== "redespachado")
+    throw new Error("Report did not reach redespachado");
+  if (sent.conductor_envio !== "Conductor E4")
+    throw new Error("Driver not stored");
+  if (sent.placa_envio !== "SAL123")
+    throw new Error("Departure plate not normalized");
   console.log("OK redispatch: driver + plate + observations + redespachado");
 
   const securityNotifications = await rpc(
@@ -217,7 +249,10 @@ try {
   }
   console.log("OK notification: report sent routed to Seguridad");
 
-  await rpc(sessions.seguridad.client, "mark_all_internal_notifications_read_ep4");
+  await rpc(
+    sessions.seguridad.client,
+    "mark_all_internal_notifications_read_ep4",
+  );
   const securityReadBack = await rpc(
     sessions.seguridad.client,
     "get_my_notifications_ep4",
@@ -237,9 +272,13 @@ try {
 
   if (hiddenError) throw hiddenError;
   if ((hiddenFromDevoluciones ?? []).length !== 0) {
-    throw new Error("Devoluciones unexpectedly has direct reportes_carga table visibility");
+    throw new Error(
+      "Devoluciones unexpectedly has direct reportes_carga table visibility",
+    );
   }
-  console.log("OK RLS: Devoluciones has no direct Reporte de carga table visibility");
+  console.log(
+    "OK RLS: Devoluciones has no direct Reporte de carga table visibility",
+  );
 
   const analytics = await rpc(
     sessions.devoluciones.client,
@@ -267,16 +306,25 @@ try {
   }
   console.log("OK analytics: combined Devoluciones + Reporte de carga");
 
-  await expectRpcFailure(sessions.inventario.client, "anular_reporte_carga_ep4", {
-    p_reporte_carga_id: reportId,
-  });
+  await expectRpcFailure(
+    sessions.inventario.client,
+    "anular_reporte_carga_ep4",
+    {
+      p_reporte_carga_id: reportId,
+    },
+  );
   console.log("OK permission: only Admin can soft-delete");
 
-  const annulled = await rpc(sessions.admin.client, "anular_reporte_carga_ep4", {
-    p_reporte_carga_id: reportId,
-  });
+  const annulled = await rpc(
+    sessions.admin.client,
+    "anular_reporte_carga_ep4",
+    {
+      p_reporte_carga_id: reportId,
+    },
+  );
 
-  if (annulled !== true) throw new Error("Admin soft-delete did not return true");
+  if (annulled !== true)
+    throw new Error("Admin soft-delete did not return true");
 
   const afterDelete = await rpc(
     sessions.transportes.client,

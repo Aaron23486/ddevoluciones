@@ -130,7 +130,9 @@ export async function getReportesCargaDetails(ids: readonly string[]) {
   const [historyResult, evidenceResult] = await Promise.all([
     supabase
       .from("reportes_carga_historial")
-      .select("id,reporte_carga_id,accion,estado_anterior,estado_nuevo,usuario_nombre,observacion,created_at")
+      .select(
+        "id,reporte_carga_id,accion,estado_anterior,estado_nuevo,usuario_nombre,observacion,created_at",
+      )
       .in("reporte_carga_id", [...ids])
       .order("created_at", { ascending: true }),
     supabase

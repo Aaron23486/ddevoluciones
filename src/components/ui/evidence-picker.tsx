@@ -75,7 +75,9 @@ export function EvidencePicker({
       <div className="dx-evidence-heading">
         <div>
           <strong>{label}</strong>
-          <small>{required ? "Obligatoria" : "Opcional"} | JPG, PNG o WEBP | max 5 MB</small>
+          <small>
+            {required ? "Obligatoria" : "Opcional"} | JPG, PNG o WEBP | max 5 MB
+          </small>
         </div>
         {file ? (
           <button type="button" onClick={clear}>
@@ -123,13 +125,7 @@ export function EvidencePicker({
       {file ? (
         <div className="dx-evidence-preview">
           {preview ? (
-            <Image
-              src={preview}
-              alt=""
-              width={42}
-              height={42}
-              unoptimized
-            />
+            <Image src={preview} alt="" width={42} height={42} unoptimized />
           ) : null}
           <div>
             <strong>{file.name}</strong>
@@ -137,7 +133,9 @@ export function EvidencePicker({
           </div>
         </div>
       ) : (
-        <p className="dx-evidence-empty">Aun no se ha seleccionado una imagen.</p>
+        <p className="dx-evidence-empty">
+          Aun no se ha seleccionado una imagen.
+        </p>
       )}
     </div>
   );

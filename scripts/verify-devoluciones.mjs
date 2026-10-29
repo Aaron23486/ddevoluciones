@@ -5,7 +5,9 @@ const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const password = process.env.DEMO_USERS_PASSWORD;
 
 if (!url || !key || !password) {
-  throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY or DEMO_USERS_PASSWORD");
+  throw new Error(
+    "Missing NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY or DEMO_USERS_PASSWORD",
+  );
 }
 
 const emails = {
@@ -73,8 +75,10 @@ async function createCase(flow, classification, total, good, bad) {
       p_cantidad_malo: bad,
       p_observaciones: "Smoke reception",
       p_factura_firmada_path: `smoke/${run}/firmada.jpg`,
-      p_material_bueno_path: classification !== "malo" ? `smoke/${run}/bueno.jpg` : null,
-      p_material_malo_path: classification !== "bueno" ? `smoke/${run}/malo.jpg` : null,
+      p_material_bueno_path:
+        classification !== "malo" ? `smoke/${run}/bueno.jpg` : null,
+      p_material_malo_path:
+        classification !== "bueno" ? `smoke/${run}/malo.jpg` : null,
     });
   }
 
@@ -121,7 +125,9 @@ async function createCase(flow, classification, total, good, bad) {
 
   if (closedError) throw closedError;
   if (closed.estado !== "cerrada") {
-    throw new Error(`${flow}/${classification} did not close; state=${closed.estado}`);
+    throw new Error(
+      `${flow}/${classification} did not close; state=${closed.estado}`,
+    );
   }
 
   console.log(`OK ${flow.padEnd(7)} ${classification.padEnd(5)} -> cerrada`);
@@ -143,10 +149,8 @@ try {
   });
   console.log("OK permission: pesado cannot create devolucion");
 
-  const { data: transportRows, error: transportError } = await clients.transportes
-    .from("devoluciones")
-    .select("id")
-    .limit(1);
+  const { data: transportRows, error: transportError } =
+    await clients.transportes.from("devoluciones").select("id").limit(1);
   if (transportError) throw transportError;
   if ((transportRows ?? []).length !== 0) {
     throw new Error("transportes unexpectedly sees devoluciones");
@@ -175,7 +179,9 @@ try {
   });
   console.log("OK permission: devoluciones cannot hard-delete");
 
-  console.log(`Epic 3 remote verification passed: 6 flows + permission/RLS checks`);
+  console.log(
+    `Epic 3 remote verification passed: 6 flows + permission/RLS checks`,
+  );
 } finally {
   for (const id of created) {
     try {

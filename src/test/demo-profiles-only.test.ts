@@ -17,23 +17,35 @@ describe("demo profiles-only contract", () => {
 
   it("does not show or query access requests in Usuarios", () => {
     const users = source("src/app/(protected)/usuarios/page.tsx");
-    expect(users).not.toMatch(/user_access_requests|safeRequests|approveAccessRequest|rejectAccessRequest|Solicitudes pendientes|<h2>Solicitudes<\/h2>/i);
+    expect(users).not.toMatch(
+      /user_access_requests|safeRequests|approveAccessRequest|rejectAccessRequest|Solicitudes pendientes|<h2>Solicitudes<\/h2>/i,
+    );
   });
 
   it("login does not allow registration or request-based access", () => {
     const login = source("src/app/login/page.tsx");
     const auth = source("src/features/auth/actions.ts");
     expect(login).toContain("signIn");
-    expect(login).not.toMatch(/signUp|requestAccess|Enviar solicitud|Solicitar acceso/i);
+    expect(login).not.toMatch(
+      /signUp|requestAccess|Enviar solicitud|Solicitar acceso/i,
+    );
     expect(auth).not.toContain('from("user_access_requests")');
   });
 
-  it("documents manual setup for every demo role", () => {
+  it("documents and seeds every demo role", () => {
     const readme = source("README.md");
-    const sql = source("supabase/manual/CONFIGURAR_ROLES_DEMO.sql");
-    for (const role of ["admin", "devoluciones", "pesado", "inventario", "almacen", "transportes", "seguridad"]) {
+    const seed = source("scripts/demo-users.mjs");
+    for (const role of [
+      "admin",
+      "devoluciones",
+      "pesado",
+      "inventario",
+      "almacen",
+      "transportes",
+      "seguridad",
+    ]) {
       expect(readme).toContain(`\`${role}\``);
-      expect(sql).toContain(`'${role}'`);
+      expect(seed).toContain(`role: "${role}"`);
     }
     expect(sql).not.toMatch(/(password|service_role)\s*=/i);
   });

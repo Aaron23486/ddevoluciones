@@ -48,7 +48,11 @@ export async function signIn(formData: FormData): Promise<void> {
     loginRedirect({ error: "inactive" });
   }
 
-  redirect(profile?.role === "transportes" || profile?.role === "seguridad" ? "/reportes-carga" : "/dashboard");
+  redirect(
+    profile?.role === "transportes" || profile?.role === "seguridad"
+      ? "/reportes-carga"
+      : "/dashboard",
+  );
 }
 
 export async function signOut(): Promise<void> {

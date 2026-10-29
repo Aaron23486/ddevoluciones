@@ -1,12 +1,9 @@
 import { z } from "zod";
 
-const optionalText = z.preprocess(
-  (value) => {
-    const text = String(value ?? "").trim();
-    return text.length ? text : undefined;
-  },
-  z.string().max(2000).optional(),
-);
+const optionalText = z.preprocess((value) => {
+  const text = String(value ?? "").trim();
+  return text.length ? text : undefined;
+}, z.string().max(2000).optional());
 
 export const createReporteCargaSchema = z.object({
   numeroDocumento: optionalText,
