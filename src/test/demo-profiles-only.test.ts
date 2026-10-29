@@ -47,6 +47,6 @@ describe("demo profiles-only contract", () => {
       expect(readme).toContain(`\`${role}\``);
       expect(seed).toContain(`role: "${role}"`);
     }
-    expect(sql).not.toMatch(/(password|service_role)\s*=/i);
+    expect(seed).not.toMatch(/(password|service_role)\s*[:=]/i);
   });
 });
