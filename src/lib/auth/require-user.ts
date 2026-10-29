@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getDefaultRoute } from "@/constants/permissions";
 import { isUserRole, type UserRole } from "@/constants/roles";
+import { securityEvent } from "@/lib/security/events";
 
 export type ActiveProfile = {
   id: string;
@@ -46,6 +47,7 @@ export async function requireRole(
   const profile = await requireActiveProfile();
 
   if (!allowedRoles.includes(profile.role)) {
+    securityEvent("access.denied_role", { userId: profile.id });
     redirect(`${getDefaultRoute(profile.role)}?error=forbidden`);
   }
 
