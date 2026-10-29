@@ -1,6 +1,7 @@
 import { ShieldCheck, UserCheck, UserCog, UserX, Users } from "lucide-react";
 import { USER_ROLES } from "@/constants/roles";
 import { setUserActive, setUserRole } from "@/features/users/actions";
+import { ROUTE_ROLES } from "@/constants/permissions";
 import { requireRole } from "@/lib/auth/require-user";
 import { createClient } from "@/lib/supabase/server";
 
@@ -37,7 +38,7 @@ function date(value: string): string {
 }
 
 export default async function UsersPage({ searchParams }: UsersPageProps) {
-  await requireRole(["admin"]);
+  await requireRole(ROUTE_ROLES["/usuarios"]);
 
   const params = await searchParams;
   const search = one(params.search).trim().toLocaleLowerCase("es");
