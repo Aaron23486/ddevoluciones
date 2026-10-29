@@ -10,10 +10,9 @@ const all = [
 describe("personal inbox cleanup", () => {
   it("hides only notices created at or before the cutoff", () => {
     expect(
-      filterPersonallyClearedNotifications(
-        all,
-        "2026-10-06T10:00:00Z",
-      ).map((item) => item.id),
+      filterPersonallyClearedNotifications(all, "2026-10-06T10:00:00Z").map(
+        (item) => item.id,
+      ),
     ).toEqual(["new"]);
   });
 

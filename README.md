@@ -14,17 +14,18 @@ El proyecto utiliza Next.js y Supabase para implementar una aplicacion operativa
 
 ### Pantallas principales
 
-| Inicio de sesion | Devoluciones |
-|---|---|
+| Inicio de sesion                                 | Devoluciones                                            |
+| ------------------------------------------------ | ------------------------------------------------------- |
 | ![Login de DDevoluciones](docs/images/login.png) | ![Modulo de devoluciones](docs/images/devoluciones.png) |
 
-| Reporte de carga | Usuarios |
-|---|---|
+| Reporte de carga                                    | Usuarios                                                |
+| --------------------------------------------------- | ------------------------------------------------------- |
 | ![Reporte de carga](docs/images/reportes-carga.png) | ![Administracion de usuarios](docs/images/usuarios.png) |
 
 <!-- DDEVOLUCIONES_SCREENSHOTS_END -->
 
 ## Funcionalidades
+
 - Registro y seguimiento de devoluciones.
 - Flujos independientes para Pesado y Almacen.
 - Clasificacion de material bueno, malo o mixto.
@@ -43,15 +44,15 @@ El proyecto utiliza Next.js y Supabase para implementar una aplicacion operativa
 
 El sistema utiliza siete roles:
 
-| Rol | Responsabilidad principal |
-|---|---|
-| `admin` | Administracion y operacion completa |
-| `devoluciones` | Registro y gestion inicial de devoluciones |
-| `pesado` | Recepcion fisica y ubicacion del flujo Pesado |
-| `inventario` | Inventario, clasificacion, disposicion y cargas |
-| `almacen` | Ubicacion del material bueno del flujo Almacen |
-| `transportes` | Operacion autorizada de reportes de carga |
-| `seguridad` | Operacion autorizada de reportes de carga |
+| Rol            | Responsabilidad principal                       |
+| -------------- | ----------------------------------------------- |
+| `admin`        | Administracion y operacion completa             |
+| `devoluciones` | Registro y gestion inicial de devoluciones      |
+| `pesado`       | Recepcion fisica y ubicacion del flujo Pesado   |
+| `inventario`   | Inventario, clasificacion, disposicion y cargas |
+| `almacen`      | Ubicacion del material bueno del flujo Almacen  |
+| `transportes`  | Operacion autorizada de reportes de carga       |
+| `seguridad`    | Operacion autorizada de reportes de carga       |
 
 La interfaz no es la autoridad de seguridad. Los permisos efectivos se validan en servidor, RPC y politicas RLS.
 

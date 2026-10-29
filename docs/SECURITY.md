@@ -36,15 +36,15 @@ seguridad
 
 ## Politica de acceso
 
-| Rol | Devoluciones | Reporte de carga | Usuarios |
-|---|---|---|---|
-| `admin` | Completo | Completo | Administracion |
-| `devoluciones` | Registro y gestion autorizada | Sin acceso | Sin acceso |
-| `pesado` | Flujo Pesado | Sin acceso | Sin acceso |
-| `inventario` | Inventario y disposicion | Ver, crear y redespachar | Sin acceso |
-| `almacen` | Ubicacion flujo Almacen | Sin acceso | Sin acceso |
-| `transportes` | Sin acceso | Ver y crear | Sin acceso |
-| `seguridad` | Sin acceso | Ver y crear | Sin acceso |
+| Rol            | Devoluciones                  | Reporte de carga         | Usuarios       |
+| -------------- | ----------------------------- | ------------------------ | -------------- |
+| `admin`        | Completo                      | Completo                 | Administracion |
+| `devoluciones` | Registro y gestion autorizada | Sin acceso               | Sin acceso     |
+| `pesado`       | Flujo Pesado                  | Sin acceso               | Sin acceso     |
+| `inventario`   | Inventario y disposicion      | Ver, crear y redespachar | Sin acceso     |
+| `almacen`      | Ubicacion flujo Almacen       | Sin acceso               | Sin acceso     |
+| `transportes`  | Sin acceso                    | Ver y crear              | Sin acceso     |
+| `seguridad`    | Sin acceso                    | Ver y crear              | Sin acceso     |
 
 Las condiciones detalladas de cada RPC son la autoridad final.
 

@@ -43,9 +43,7 @@ async function login(role, email) {
   });
 
   if (error || !data.user) {
-    throw new Error(
-      `LOGIN ${role}: ${error?.message ?? "no user"}`,
-    );
+    throw new Error(`LOGIN ${role}: ${error?.message ?? "no user"}`);
   }
 
   sessions[role] = {
@@ -60,9 +58,7 @@ async function expectRpcDenied(role, rpc, args) {
   const { error } = await sessions[role].client.rpc(rpc, args);
 
   if (!error) {
-    throw new Error(
-      `SECURITY FAILURE: ${role} executed ${rpc}`,
-    );
+    throw new Error(`SECURITY FAILURE: ${role} executed ${rpc}`);
   }
 
   console.log(`OK deny RPC: ${role} -> ${rpc}`);
@@ -76,39 +72,34 @@ async function expectNoRows(label, promise) {
   }
 
   if ((data ?? []).length !== 0) {
-    throw new Error(
-      `SECURITY FAILURE: ${label} returned protected rows`,
-    );
+    throw new Error(`SECURITY FAILURE: ${label} returned protected rows`);
   }
 
   console.log(`OK IDOR: ${label}`);
 }
 
 async function createDevolucion(flow, suffix) {
-  const { data, error } =
-    await sessions.devoluciones.client.rpc(
-      "crear_devolucion",
-      {
-        p_factura: `SEC-${run}-${suffix}`,
-        p_articulo: `SECURITY-${suffix}`,
-        p_cantidad: 1,
-        p_clasificacion: "bueno",
-        p_descripcion: "Security verification",
-        p_flujo: flow,
-        p_transportista_nombre: "DEMO",
-        p_transportista_cedula: "DEMO",
-        p_placa_camion: "SEC001",
-        p_factura_path:
-          `security-audit/${run}/${suffix}-factura.jpg`,
-        p_material_path:
-          `security-audit/${run}/${suffix}-material.jpg`,
-      },
-    );
+  const { data, error } = await sessions.devoluciones.client.rpc(
+    "crear_devolucion",
+    {
+      p_factura: `SEC-${run}-${suffix}`,
+      p_articulo: `SECURITY-${suffix}`,
+      p_cantidad: 1,
+      p_clasificacion: "bueno",
+      p_descripcion: "Security verification",
+      p_flujo: flow,
+      p_transportista_nombre: "DEMO",
+      p_transportista_cedula: "DEMO",
+      p_placa_camion: "SEC001",
+      p_factura_path: `security-audit/${run}/${suffix}-factura.jpg`,
+      p_material_path: `security-audit/${run}/${suffix}-material.jpg`,
+    },
+  );
 
   if (error || !data) {
     throw new Error(
       `Could not create ${flow} security case: ` +
-      `${error?.message ?? "no id"}`,
+        `${error?.message ?? "no id"}`,
     );
   }
 
@@ -117,22 +108,17 @@ async function createDevolucion(flow, suffix) {
 }
 
 async function upload(role, path) {
-  const bytes = new Uint8Array([
-    0xff, 0xd8, 0xff, 0xd9,
-  ]);
+  const bytes = new Uint8Array([0xff, 0xd8, 0xff, 0xd9]);
 
-  const { error } =
-    await sessions[role].client.storage
-      .from("devoluciones")
-      .upload(path, bytes, {
-        contentType: "image/jpeg",
-        upsert: false,
-      });
+  const { error } = await sessions[role].client.storage
+    .from("devoluciones")
+    .upload(path, bytes, {
+      contentType: "image/jpeg",
+      upsert: false,
+    });
 
   if (error) {
-    throw new Error(
-      `UPLOAD ${role}: ${error.message}`,
-    );
+    throw new Error(`UPLOAD ${role}: ${error.message}`);
   }
 
   uploadedPaths.push(path);
@@ -140,9 +126,7 @@ async function upload(role, path) {
 
 async function cleanupStorage(path) {
   try {
-    await sessions.admin.client.storage
-      .from("devoluciones")
-      .remove([path]);
+    await sessions.admin.client.storage.from("devoluciones").remove([path]);
   } catch {
     // Best effort cleanup.
   }
@@ -159,9 +143,7 @@ try {
   }
 
   const ids = Object.fromEntries(
-    Object.entries(sessions).map(
-      ([role, session]) => [role, session.user.id],
-    ),
+    Object.entries(sessions).map(([role, session]) => [role, session.user.id]),
   );
 
   // ========================================================
@@ -195,87 +177,65 @@ try {
   console.log("[2/6] PRIVILEGE ESCALATION");
 
   {
-    const { error } =
-      await sessions.devoluciones.client.rpc(
-        "admin_set_user_role",
-        {
-          p_user_id: ids.devoluciones,
-          p_role: "admin",
-        },
-      );
+    const { error } = await sessions.devoluciones.client.rpc(
+      "admin_set_user_role",
+      {
+        p_user_id: ids.devoluciones,
+        p_role: "admin",
+      },
+    );
 
     if (!error) {
-      await sessions.admin.client.rpc(
-        "admin_set_user_role",
-        {
-          p_user_id: ids.devoluciones,
-          p_role: "devoluciones",
-        },
-      );
+      await sessions.admin.client.rpc("admin_set_user_role", {
+        p_user_id: ids.devoluciones,
+        p_role: "devoluciones",
+      });
 
-      throw new Error(
-        "SECURITY FAILURE: devoluciones self-promoted to admin",
-      );
+      throw new Error("SECURITY FAILURE: devoluciones self-promoted to admin");
     }
 
-    console.log(
-      "OK escalation: devoluciones cannot become admin",
-    );
+    console.log("OK escalation: devoluciones cannot become admin");
   }
 
   {
-    const { error } =
-      await sessions.devoluciones.client.rpc(
-        "admin_set_user_active",
-        {
-          p_user_id: ids.devoluciones,
-          p_is_active: false,
-        },
-      );
+    const { error } = await sessions.devoluciones.client.rpc(
+      "admin_set_user_active",
+      {
+        p_user_id: ids.devoluciones,
+        p_is_active: false,
+      },
+    );
 
     if (!error) {
-      await sessions.admin.client.rpc(
-        "admin_set_user_active",
-        {
-          p_user_id: ids.devoluciones,
-          p_is_active: true,
-        },
-      );
+      await sessions.admin.client.rpc("admin_set_user_active", {
+        p_user_id: ids.devoluciones,
+        p_is_active: true,
+      });
 
       throw new Error(
         "SECURITY FAILURE: non-admin executed admin_set_user_active",
       );
     }
 
-    console.log(
-      "OK escalation: non-admin cannot change active state",
-    );
+    console.log("OK escalation: non-admin cannot change active state");
   }
 
   {
-    const { error } =
-      await sessions.devoluciones.client
-        .from("profiles")
-        .update({ role: "admin" })
-        .eq("id", ids.devoluciones);
+    const { error } = await sessions.devoluciones.client
+      .from("profiles")
+      .update({ role: "admin" })
+      .eq("id", ids.devoluciones);
 
     if (!error) {
-      await sessions.admin.client.rpc(
-        "admin_set_user_role",
-        {
-          p_user_id: ids.devoluciones,
-          p_role: "devoluciones",
-        },
-      );
+      await sessions.admin.client.rpc("admin_set_user_role", {
+        p_user_id: ids.devoluciones,
+        p_role: "devoluciones",
+      });
 
-      throw new Error(
-        "SECURITY FAILURE: direct profile UPDATE succeeded",
-      );
+      throw new Error("SECURITY FAILURE: direct profile UPDATE succeeded");
     }
 
-    console.log(
-      "OK direct write: profiles UPDATE blocked",
-    );
+    console.log("OK direct write: profiles UPDATE blocked");
   }
 
   // ========================================================
@@ -309,90 +269,62 @@ try {
     });
   }
 
-  await expectRpcDenied(
-    "inventario",
-    "confirmar_recepcion_devolucion",
-    {
-      p_devolucion_id: randomId,
-      p_cantidad_recibida: 1,
-      p_clasificacion: "bueno",
-      p_cantidad_bueno: null,
-      p_cantidad_malo: null,
-      p_observaciones: null,
-      p_factura_firmada_path: "x",
-      p_material_bueno_path: "x",
-      p_material_malo_path: null,
-    },
-  );
+  await expectRpcDenied("inventario", "confirmar_recepcion_devolucion", {
+    p_devolucion_id: randomId,
+    p_cantidad_recibida: 1,
+    p_clasificacion: "bueno",
+    p_cantidad_bueno: null,
+    p_cantidad_malo: null,
+    p_observaciones: null,
+    p_factura_firmada_path: "x",
+    p_material_bueno_path: "x",
+    p_material_malo_path: null,
+  });
 
-  await expectRpcDenied(
-    "pesado",
-    "procesar_inventario_devolucion",
-    {
-      p_devolucion_id: randomId,
-      p_pallet_codigo: "X",
-      p_observaciones: null,
-      p_evidencia_path: "x",
-      p_cantidad_bueno: null,
-      p_cantidad_malo: null,
-    },
-  );
+  await expectRpcDenied("pesado", "procesar_inventario_devolucion", {
+    p_devolucion_id: randomId,
+    p_pallet_codigo: "X",
+    p_observaciones: null,
+    p_evidencia_path: "x",
+    p_cantidad_bueno: null,
+    p_cantidad_malo: null,
+  });
 
-  await expectRpcDenied(
-    "inventario",
-    "ubicar_material_devolucion",
-    {
-      p_material_id: randomId,
-      p_ubicacion: "X",
-      p_observaciones: null,
-      p_evidencia_path: null,
-    },
-  );
+  await expectRpcDenied("inventario", "ubicar_material_devolucion", {
+    p_material_id: randomId,
+    p_ubicacion: "X",
+    p_observaciones: null,
+    p_evidencia_path: null,
+  });
 
-  await expectRpcDenied(
-    "pesado",
-    "disponer_material_devolucion",
-    {
-      p_material_id: randomId,
-      p_decision_final: "X",
-      p_observaciones: "X",
-      p_evidencia_path: "x",
-    },
-  );
+  await expectRpcDenied("pesado", "disponer_material_devolucion", {
+    p_material_id: randomId,
+    p_decision_final: "X",
+    p_observaciones: "X",
+    p_evidencia_path: "x",
+  });
 
-  await expectRpcDenied(
-    "transportes",
-    "redespachar_reporte_carga_ep4",
-    {
-      p_reporte_carga_id: randomId,
-      p_conductor: "X",
-      p_placa_salida: "X",
-      p_observaciones: "X",
-      p_evidencia_path: "x",
-    },
-  );
+  await expectRpcDenied("transportes", "redespachar_reporte_carga_ep4", {
+    p_reporte_carga_id: randomId,
+    p_conductor: "X",
+    p_placa_salida: "X",
+    p_observaciones: "X",
+    p_evidencia_path: "x",
+  });
 
-  await expectRpcDenied(
-    "inventario",
-    "anular_reporte_carga_ep4",
-    {
-      p_reporte_carga_id: randomId,
-    },
-  );
+  await expectRpcDenied("inventario", "anular_reporte_carga_ep4", {
+    p_reporte_carga_id: randomId,
+  });
 
-  await expectRpcDenied(
-    "inventario",
-    "get_operational_analytics_ep4",
-    {
-      p_bucket: null,
-      p_modulo: null,
-      p_estado_devolucion: null,
-      p_flujo: null,
-      p_material: null,
-      p_mes: null,
-      p_estado_reporte: null,
-    },
-  );
+  await expectRpcDenied("inventario", "get_operational_analytics_ep4", {
+    p_bucket: null,
+    p_modulo: null,
+    p_estado_devolucion: null,
+    p_flujo: null,
+    p_material: null,
+    p_mes: null,
+    p_estado_reporte: null,
+  });
 
   // ========================================================
   // 4. CROSS-FLOW IDOR
@@ -401,11 +333,9 @@ try {
   console.log("");
   console.log("[4/6] DEVOLUCIONES CROSS-FLOW IDOR");
 
-  const pesadoId =
-    await createDevolucion("pesado", "PESADO");
+  const pesadoId = await createDevolucion("pesado", "PESADO");
 
-  const almacenId =
-    await createDevolucion("almacen", "ALMACEN");
+  const almacenId = await createDevolucion("almacen", "ALMACEN");
 
   await expectNoRows(
     "Pesado cannot read Almacen devolucion by UUID",
@@ -448,30 +378,21 @@ try {
   );
 
   {
-    const { error } =
-      await sessions.devoluciones.client
-        .from("devoluciones")
-        .update({ estado: "cerrada" })
-        .eq("id", pesadoId);
+    const { error } = await sessions.devoluciones.client
+      .from("devoluciones")
+      .update({ estado: "cerrada" })
+      .eq("id", pesadoId);
 
     if (!error) {
-      throw new Error(
-        "SECURITY FAILURE: direct devoluciones UPDATE succeeded",
-      );
+      throw new Error("SECURITY FAILURE: direct devoluciones UPDATE succeeded");
     }
 
-    console.log(
-      "OK direct write: devoluciones UPDATE blocked",
-    );
+    console.log("OK direct write: devoluciones UPDATE blocked");
   }
 
-  await expectRpcDenied(
-    "devoluciones",
-    "admin_eliminar_devolucion",
-    {
-      p_devolucion_id: pesadoId,
-    },
-  );
+  await expectRpcDenied("devoluciones", "admin_eliminar_devolucion", {
+    p_devolucion_id: pesadoId,
+  });
 
   // ========================================================
   // 5. STORAGE MODULE ISOLATION
@@ -480,20 +401,17 @@ try {
   console.log("");
   console.log("[5/6] STORAGE ISOLATION");
 
-  const devPath =
-    `${ids.devoluciones}/security-${run}/unreferenced.jpg`;
+  const devPath = `${ids.devoluciones}/security-${run}/unreferenced.jpg`;
 
-  const reportPath =
-    `${ids.transportes}/reportes-carga/security-${run}.jpg`;
+  const reportPath = `${ids.transportes}/reportes-carga/security-${run}.jpg`;
 
   await upload("devoluciones", devPath);
   await upload("transportes", reportPath);
 
   {
-    const { error } =
-      await sessions.transportes.client.storage
-        .from("devoluciones")
-        .download(devPath);
+    const { error } = await sessions.transportes.client.storage
+      .from("devoluciones")
+      .download(devPath);
 
     if (!error) {
       throw new Error(
@@ -501,16 +419,13 @@ try {
       );
     }
 
-    console.log(
-      "OK Storage: Transportes cannot read Devoluciones evidence",
-    );
+    console.log("OK Storage: Transportes cannot read Devoluciones evidence");
   }
 
   {
-    const { error } =
-      await sessions.devoluciones.client.storage
-        .from("devoluciones")
-        .download(reportPath);
+    const { error } = await sessions.devoluciones.client.storage
+      .from("devoluciones")
+      .download(reportPath);
 
     if (!error) {
       throw new Error(
@@ -518,43 +433,31 @@ try {
       );
     }
 
-    console.log(
-      "OK Storage: Devoluciones cannot read Reporte evidence",
-    );
+    console.log("OK Storage: Devoluciones cannot read Reporte evidence");
   }
 
   {
-    const { error } =
-      await sessions.devoluciones.client.storage
-        .from("devoluciones")
-        .remove([devPath]);
+    const { error } = await sessions.devoluciones.client.storage
+      .from("devoluciones")
+      .remove([devPath]);
 
     if (error) {
-      throw new Error(
-        `Own unreferenced cleanup failed: ${error.message}`,
-      );
+      throw new Error(`Own unreferenced cleanup failed: ${error.message}`);
     }
 
-    console.log(
-      "OK Storage: uploader can remove unreferenced failed upload",
-    );
+    console.log("OK Storage: uploader can remove unreferenced failed upload");
   }
 
   {
-    const { error } =
-      await sessions.transportes.client.storage
-        .from("devoluciones")
-        .remove([reportPath]);
+    const { error } = await sessions.transportes.client.storage
+      .from("devoluciones")
+      .remove([reportPath]);
 
     if (error) {
-      throw new Error(
-        `Report unreferenced cleanup failed: ${error.message}`,
-      );
+      throw new Error(`Report unreferenced cleanup failed: ${error.message}`);
     }
 
-    console.log(
-      "OK Storage: report uploader can remove unreferenced upload",
-    );
+    console.log("OK Storage: report uploader can remove unreferenced upload");
   }
 
   // ========================================================
@@ -564,37 +467,32 @@ try {
   console.log("");
   console.log("[6/6] REFERENCED EVIDENCE PROTECTION");
 
-  const refFactura =
-    `${ids.devoluciones}/security-${run}/factura.jpg`;
+  const refFactura = `${ids.devoluciones}/security-${run}/factura.jpg`;
 
-  const refMaterial =
-    `${ids.devoluciones}/security-${run}/material.jpg`;
+  const refMaterial = `${ids.devoluciones}/security-${run}/material.jpg`;
 
   await upload("devoluciones", refFactura);
   await upload("devoluciones", refMaterial);
 
   const { data: referencedId, error: referencedError } =
-    await sessions.devoluciones.client.rpc(
-      "crear_devolucion",
-      {
-        p_factura: `SEC-${run}-STORAGE`,
-        p_articulo: "SECURITY-STORAGE",
-        p_cantidad: 1,
-        p_clasificacion: "bueno",
-        p_descripcion: "Referenced evidence security test",
-        p_flujo: "pesado",
-        p_transportista_nombre: "DEMO",
-        p_transportista_cedula: "DEMO",
-        p_placa_camion: "SEC002",
-        p_factura_path: refFactura,
-        p_material_path: refMaterial,
-      },
-    );
+    await sessions.devoluciones.client.rpc("crear_devolucion", {
+      p_factura: `SEC-${run}-STORAGE`,
+      p_articulo: "SECURITY-STORAGE",
+      p_cantidad: 1,
+      p_clasificacion: "bueno",
+      p_descripcion: "Referenced evidence security test",
+      p_flujo: "pesado",
+      p_transportista_nombre: "DEMO",
+      p_transportista_cedula: "DEMO",
+      p_placa_camion: "SEC002",
+      p_factura_path: refFactura,
+      p_material_path: refMaterial,
+    });
 
   if (referencedError || !referencedId) {
     throw new Error(
       `Could not create referenced evidence case: ` +
-      `${referencedError?.message ?? "no id"}`,
+        `${referencedError?.message ?? "no id"}`,
     );
   }
 
@@ -607,10 +505,9 @@ try {
     .from("devoluciones")
     .remove([refFactura]);
 
-  const { error: stillExistsError } =
-    await sessions.devoluciones.client.storage
-      .from("devoluciones")
-      .download(refFactura);
+  const { error: stillExistsError } = await sessions.devoluciones.client.storage
+    .from("devoluciones")
+    .download(refFactura);
 
   if (stillExistsError) {
     throw new Error(
@@ -618,46 +515,34 @@ try {
     );
   }
 
-  console.log(
-    "OK Storage: referenced evidence cannot be deleted by uploader",
-  );
+  console.log("OK Storage: referenced evidence cannot be deleted by uploader");
 
   console.log("");
   console.log("==============================================");
   console.log(" EPICA 6 SECURITY MATRIX PASSED");
   console.log("==============================================");
-}
-finally {
+} finally {
   // Restore any test account state defensively.
   if (sessions.admin) {
     try {
-      await sessions.admin.client.rpc(
-        "admin_set_user_role",
-        {
-          p_user_id: sessions.devoluciones?.user.id,
-          p_role: "devoluciones",
-        },
-      );
+      await sessions.admin.client.rpc("admin_set_user_role", {
+        p_user_id: sessions.devoluciones?.user.id,
+        p_role: "devoluciones",
+      });
     } catch {}
 
     try {
-      await sessions.admin.client.rpc(
-        "admin_set_user_active",
-        {
-          p_user_id: sessions.devoluciones?.user.id,
-          p_is_active: true,
-        },
-      );
+      await sessions.admin.client.rpc("admin_set_user_active", {
+        p_user_id: sessions.devoluciones?.user.id,
+        p_is_active: true,
+      });
     } catch {}
 
     for (const id of createdDevoluciones) {
       try {
-        await sessions.admin.client.rpc(
-          "admin_eliminar_devolucion",
-          {
-            p_devolucion_id: id,
-          },
-        );
+        await sessions.admin.client.rpc("admin_eliminar_devolucion", {
+          p_devolucion_id: id,
+        });
       } catch {}
     }
 

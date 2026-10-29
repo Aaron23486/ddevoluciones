@@ -150,8 +150,7 @@ export default async function DevolucionesPage({ searchParams }: Props) {
       ? await getDevolucionDetail(detailId)
       : null;
 
-  const canCreate =
-    profile.role === "admin" || profile.role === "devoluciones";
+  const canCreate = profile.role === "admin" || profile.role === "devoluciones";
   const activeFilters = Object.values(filters).filter(Boolean).length;
   const closeDetailHref = buildQuery(filters, page);
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
@@ -268,7 +267,6 @@ export default async function DevolucionesPage({ searchParams }: Props) {
           <strong>{stateMetrics.cerrada}</strong>
         </article>
       </section>
-
 
       {one(params.error) ? (
         <div className="dx-message error">Error: {one(params.error)}</div>
@@ -387,8 +385,7 @@ export default async function DevolucionesPage({ searchParams }: Props) {
                   row.estado === "pendiente_entrega";
 
                 const canInventory =
-                  (profile.role === "admin" ||
-                    profile.role === "inventario") &&
+                  (profile.role === "admin" || profile.role === "inventario") &&
                   ["recibida_bodega", "pendiente_proceso"].includes(row.estado);
 
                 const canLocate =
@@ -399,8 +396,7 @@ export default async function DevolucionesPage({ searchParams }: Props) {
                     row.flujo_inicial === "almacen");
 
                 const canDispose =
-                  profile.role === "admin" ||
-                  profile.role === "inventario";
+                  profile.role === "admin" || profile.role === "inventario";
 
                 const detailHref = buildQuery(filters, page, {
                   detail: row.id,
@@ -450,7 +446,10 @@ export default async function DevolucionesPage({ searchParams }: Props) {
                     </div>
 
                     <footer className="v3-card-actions">
-                      <Link href={detailHref} className="v3-card-primary-action">
+                      <Link
+                        href={detailHref}
+                        className="v3-card-primary-action"
+                      >
                         Ver detalle
                       </Link>
 
@@ -660,7 +659,7 @@ export default async function DevolucionesPage({ searchParams }: Props) {
                             ))
                           : null}
 
-                                                {profile.role === "admin" ? (
+                        {profile.role === "admin" ? (
                           <ConfirmDialog
                             triggerLabel="Eliminar"
                             title="Eliminar devolucion"
@@ -684,7 +683,10 @@ export default async function DevolucionesPage({ searchParams }: Props) {
                                 name="devolucionId"
                                 value={row.id}
                               />
-                              <button className="dx-confirm-delete" type="submit">
+                              <button
+                                className="dx-confirm-delete"
+                                type="submit"
+                              >
                                 Eliminar definitivamente
                               </button>
                             </form>
@@ -698,11 +700,12 @@ export default async function DevolucionesPage({ searchParams }: Props) {
             </div>
           )}
 
-          <nav className="v3-pagination v5-pagination" aria-label="Paginacion de devoluciones">
+          <nav
+            className="v3-pagination v5-pagination"
+            aria-label="Paginacion de devoluciones"
+          >
             {result.page > 1 ? (
-              <Link href={buildQuery(filters, result.page - 1)}>
-                Anterior
-              </Link>
+              <Link href={buildQuery(filters, result.page - 1)}>Anterior</Link>
             ) : (
               <span className="disabled">Anterior</span>
             )}
@@ -735,9 +738,7 @@ export default async function DevolucionesPage({ searchParams }: Props) {
             </strong>
 
             {result.page < totalPages ? (
-              <Link href={buildQuery(filters, result.page + 1)}>
-                Siguiente
-              </Link>
+              <Link href={buildQuery(filters, result.page + 1)}>Siguiente</Link>
             ) : (
               <span className="disabled">Siguiente</span>
             )}

@@ -64,12 +64,10 @@ describe("dashboard cross-highlighting", () => {
       dashboardPointOpacity(stateSelection, "state", "pendiente_ubicar"),
     ).toBe(1);
 
-    expect(
-      dashboardPointOpacity(stateSelection, "state", "cerrada"),
-    ).toBe(0.32);
+    expect(dashboardPointOpacity(stateSelection, "state", "cerrada")).toBe(
+      0.32,
+    );
 
-    expect(
-      dashboardPointOpacity(stateSelection, "flow", "pesado"),
-    ).toBe(1);
+    expect(dashboardPointOpacity(stateSelection, "flow", "pesado")).toBe(1);
   });
 });

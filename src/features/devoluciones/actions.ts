@@ -45,8 +45,14 @@ export async function createDevolucionAction(formData: FormData) {
   let materialFile: File;
 
   try {
-    facturaFile = assertEvidenceFile(formData.get("facturaEvidencia"), "Factura")!;
-    materialFile = assertEvidenceFile(formData.get("materialEvidencia"), "Material")!;
+    facturaFile = assertEvidenceFile(
+      formData.get("facturaEvidencia"),
+      "Factura",
+    )!;
+    materialFile = assertEvidenceFile(
+      formData.get("materialEvidencia"),
+      "Material",
+    )!;
   } catch {
     fail("/devoluciones", "evidence_validation");
   }
@@ -56,10 +62,22 @@ export async function createDevolucionAction(formData: FormData) {
   const uploaded: string[] = [];
 
   try {
-    const facturaPath = await uploadEvidence(supabase, profile.id, groupId, "factura", facturaFile);
+    const facturaPath = await uploadEvidence(
+      supabase,
+      profile.id,
+      groupId,
+      "factura",
+      facturaFile,
+    );
     uploaded.push(facturaPath);
 
-    const materialPath = await uploadEvidence(supabase, profile.id, groupId, "material", materialFile);
+    const materialPath = await uploadEvidence(
+      supabase,
+      profile.id,
+      groupId,
+      "material",
+      materialFile,
+    );
     uploaded.push(materialPath);
 
     const { error } = await supabase.rpc("crear_devolucion", {
@@ -104,16 +122,21 @@ export async function confirmReceptionAction(formData: FormData) {
   let badFile: File | null;
 
   try {
-    signedInvoice = assertEvidenceFile(formData.get("facturaFirmada"), "Factura firmada")!;
+    signedInvoice = assertEvidenceFile(
+      formData.get("facturaFirmada"),
+      "Factura firmada",
+    )!;
     goodFile = assertEvidenceFile(
       formData.get("materialBueno"),
       "Material bueno",
-      parsed.data.clasificacion === "bueno" || parsed.data.clasificacion === "mixto",
+      parsed.data.clasificacion === "bueno" ||
+        parsed.data.clasificacion === "mixto",
     );
     badFile = assertEvidenceFile(
       formData.get("materialMalo"),
       "Material malo",
-      parsed.data.clasificacion === "malo" || parsed.data.clasificacion === "mixto",
+      parsed.data.clasificacion === "malo" ||
+        parsed.data.clasificacion === "mixto",
     );
   } catch {
     fail("/devoluciones", "evidence_validation");
@@ -124,16 +147,34 @@ export async function confirmReceptionAction(formData: FormData) {
   const uploaded: string[] = [];
 
   try {
-    const signedPath = await uploadEvidence(supabase, profile.id, groupId, "factura-firmada", signedInvoice);
+    const signedPath = await uploadEvidence(
+      supabase,
+      profile.id,
+      groupId,
+      "factura-firmada",
+      signedInvoice,
+    );
     uploaded.push(signedPath);
 
     const goodPath = goodFile
-      ? await uploadEvidence(supabase, profile.id, groupId, "material-bueno", goodFile)
+      ? await uploadEvidence(
+          supabase,
+          profile.id,
+          groupId,
+          "material-bueno",
+          goodFile,
+        )
       : null;
     if (goodPath) uploaded.push(goodPath);
 
     const badPath = badFile
-      ? await uploadEvidence(supabase, profile.id, groupId, "material-malo", badFile)
+      ? await uploadEvidence(
+          supabase,
+          profile.id,
+          groupId,
+          "material-malo",
+          badFile,
+        )
       : null;
     if (badPath) uploaded.push(badPath);
 
@@ -174,7 +215,10 @@ export async function processInventoryAction(formData: FormData) {
 
   let evidence: File;
   try {
-    evidence = assertEvidenceFile(formData.get("evidencia"), "Evidencia de inventario")!;
+    evidence = assertEvidenceFile(
+      formData.get("evidencia"),
+      "Evidencia de inventario",
+    )!;
   } catch {
     fail("/devoluciones", "evidence_validation");
   }
@@ -225,7 +269,11 @@ export async function locateMaterialAction(formData: FormData) {
 
   let evidence: File | null;
   try {
-    evidence = assertEvidenceFile(formData.get("evidencia"), "Evidencia de ubicacion", false);
+    evidence = assertEvidenceFile(
+      formData.get("evidencia"),
+      "Evidencia de ubicacion",
+      false,
+    );
   } catch {
     fail("/devoluciones", "evidence_validation");
   }
@@ -235,7 +283,13 @@ export async function locateMaterialAction(formData: FormData) {
 
   try {
     const evidencePath = evidence
-      ? await uploadEvidence(supabase, profile.id, parsed.data.materialId, "ubicacion", evidence)
+      ? await uploadEvidence(
+          supabase,
+          profile.id,
+          parsed.data.materialId,
+          "ubicacion",
+          evidence,
+        )
       : null;
     if (evidencePath) uploaded.push(evidencePath);
 
@@ -269,7 +323,10 @@ export async function disposeMaterialAction(formData: FormData) {
 
   let evidence: File;
   try {
-    evidence = assertEvidenceFile(formData.get("evidencia"), "Evidencia de disposicion")!;
+    evidence = assertEvidenceFile(
+      formData.get("evidencia"),
+      "Evidencia de disposicion",
+    )!;
   } catch {
     fail("/devoluciones", "evidence_validation");
   }
@@ -325,7 +382,9 @@ export async function deleteDevolucionAction(formData: FormData) {
 
   const paths = (evidenceRows ?? [])
     .map((row) => row.url)
-    .filter((value): value is string => typeof value === "string" && value.length > 0);
+    .filter(
+      (value): value is string => typeof value === "string" && value.length > 0,
+    );
 
   await removeEvidencePaths(supabase, paths);
   revalidatePath("/devoluciones");

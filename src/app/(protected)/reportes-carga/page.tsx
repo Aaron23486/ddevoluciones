@@ -118,7 +118,7 @@ export default async function ReportesCargaPage({ searchParams }: Props) {
 
   const detailId = one(params.detail);
   const selected = validUuid(detailId)
-    ? result.rows.find((row) => row.id === detailId) ?? null
+    ? (result.rows.find((row) => row.id === detailId) ?? null)
     : null;
 
   const detail = selected
@@ -202,7 +202,6 @@ export default async function ReportesCargaPage({ searchParams }: Props) {
           </form>
         </ModalShell>
       </section>
-
 
       {one(params.error) ? (
         <div className="dx-message error">Error: {one(params.error)}</div>
@@ -364,7 +363,10 @@ export default async function ReportesCargaPage({ searchParams }: Props) {
                     </div>
 
                     <footer className="v3-card-actions">
-                      <Link href={detailHref} className="v3-card-primary-action">
+                      <Link
+                        href={detailHref}
+                        className="v3-card-primary-action"
+                      >
                         Ver detalle
                       </Link>
 
@@ -426,9 +428,7 @@ export default async function ReportesCargaPage({ searchParams }: Props) {
                                 <div>
                                   <span>Documento</span>
                                   <strong>
-                                    {row.numero_documento ||
-                                      row.factura ||
-                                      "-"}
+                                    {row.numero_documento || row.factura || "-"}
                                   </strong>
                                 </div>
                                 <div>
@@ -461,11 +461,12 @@ export default async function ReportesCargaPage({ searchParams }: Props) {
             </div>
           )}
 
-          <nav className="v3-pagination v5-pagination" aria-label="Paginacion de reportes de carga">
+          <nav
+            className="v3-pagination v5-pagination"
+            aria-label="Paginacion de reportes de carga"
+          >
             {result.page > 1 ? (
-              <Link href={preserve(filters, result.page - 1)}>
-                Anterior
-              </Link>
+              <Link href={preserve(filters, result.page - 1)}>Anterior</Link>
             ) : (
               <span className="disabled">Anterior</span>
             )}
@@ -498,9 +499,7 @@ export default async function ReportesCargaPage({ searchParams }: Props) {
             </strong>
 
             {result.page < totalPages ? (
-              <Link href={preserve(filters, result.page + 1)}>
-                Siguiente
-              </Link>
+              <Link href={preserve(filters, result.page + 1)}>Siguiente</Link>
             ) : (
               <span className="disabled">Siguiente</span>
             )}
