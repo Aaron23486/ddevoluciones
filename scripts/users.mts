@@ -166,7 +166,9 @@ async function main(): Promise<void> {
       const { account } = await existingAccount();
       const password = await askNewPassword(newPasswordSchema);
       await setPassword(admin, account.id, password);
-      console.log(`Contraseña actualizada para ${account.email}.`);
+      console.log(
+        `Contraseña actualizada para ${account.email}; sus sesiones abiertas se cerraron.`,
+      );
       return;
     }
 
