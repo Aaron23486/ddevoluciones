@@ -16,7 +16,12 @@
     "verify:reportes-carga": "node scripts/verify-reportes-carga.mjs",
     "verify:security": "node scripts/verify-security.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "db:up": "supabase start",
+    "db:down": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:status": "supabase status",
+    "env:local": "node scripts/env-local.mts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -45,10 +50,14 @@
     "eslint-config-next": "16.4.3",
     "jsdom": "^30.1.2",
     "prettier": "3.9.10",
+    "supabase": "2.122.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vite": "^8.3.1",
     "vitest": "^5.0.3"
   },
-  "description": "Aplicacion web para gestionar devoluciones, evidencias, reportes de carga y flujos operativos con control de acceso por roles."
+  "description": "Aplicacion web para gestionar devoluciones, evidencias, reportes de carga y flujos operativos con control de acceso por roles.",
+  "engines": {
+    "node": ">=22.18"
+  }
 }
