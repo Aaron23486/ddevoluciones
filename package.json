@@ -10,10 +10,6 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify:demo-login": "node scripts/verify-demo-login.mjs",
-    "verify:devoluciones": "node scripts/verify-devoluciones.mjs",
-    "verify:reportes-carga": "node scripts/verify-reportes-carga.mjs",
-    "verify:security": "node scripts/verify-security.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "db:up": "supabase start",
@@ -23,7 +19,9 @@
     "env:local": "node scripts/env-local.mts",
     "demo:setup": "node scripts/demo-setup.mts",
     "create-admin": "node scripts/users.mts create --role admin",
-    "users": "node scripts/users.mts"
+    "users": "node scripts/users.mts",
+    "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.integration.config.mts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -48,6 +46,7 @@
     "@types/node": "^22.20.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "5.0.3",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
     "jsdom": "^30.1.2",
