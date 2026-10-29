@@ -23,7 +23,9 @@ export async function markAllNotificationsReadAction() {
   await requireActiveProfile();
 
   const supabase = await createClient();
-  const { error } = await supabase.rpc("mark_all_internal_notifications_read_ep4");
+  const { error } = await supabase.rpc(
+    "mark_all_internal_notifications_read_ep4",
+  );
 
   if (error) throw new Error(error.message);
   revalidatePath("/", "layout");

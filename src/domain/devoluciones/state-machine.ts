@@ -9,10 +9,7 @@ export type ParentState =
   | "cerrada";
 
 export type MaterialState =
-  | "recibido"
-  | "pendiente_ubicar"
-  | "pendiente_disposicion"
-  | "cerrada";
+  "recibido" | "pendiente_ubicar" | "pendiente_disposicion" | "cerrada";
 
 export type MaterialSnapshot = {
   tipo_material: "bueno" | "malo";

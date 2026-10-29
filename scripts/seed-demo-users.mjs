@@ -2,14 +2,17 @@ import { createClient } from "@supabase/supabase-js";
 import { DEMO_USERS } from "./demo-users.mjs";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const secretKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+const secretKey =
+  process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 const password = process.env.DEMO_USERS_PASSWORD;
 
 if (!url) {
   throw new Error("NEXT_PUBLIC_SUPABASE_URL is required.");
 }
 if (!secretKey) {
-  throw new Error("SUPABASE_SECRET_KEY (preferred) or SUPABASE_SERVICE_ROLE_KEY is required.");
+  throw new Error(
+    "SUPABASE_SECRET_KEY (preferred) or SUPABASE_SERVICE_ROLE_KEY is required.",
+  );
 }
 if (!password || password.length < 12) {
   throw new Error("DEMO_USERS_PASSWORD must contain at least 12 characters.");
@@ -26,7 +29,10 @@ const admin = createClient(url, secretKey, {
 async function getAllUsers() {
   const all = [];
   for (let page = 1; page <= 20; page += 1) {
-    const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 1000 });
+    const { data, error } = await admin.auth.admin.listUsers({
+      page,
+      perPage: 1000,
+    });
     if (error) throw error;
     all.push(...data.users);
     if (data.users.length < 1000) break;
@@ -85,7 +91,9 @@ for (const demo of DEMO_USERS) {
   );
 
   if (profileError) {
-    throw new Error(`Could not provision profile ${demo.email}: ${profileError.message}`);
+    throw new Error(
+      `Could not provision profile ${demo.email}: ${profileError.message}`,
+    );
   }
 
   // Seeded users are direct demo identities, not pending access requests.

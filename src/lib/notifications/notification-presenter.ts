@@ -22,9 +22,11 @@ const EVENT_LABELS: Record<string, string> = {
 export function humanNotificationTitle(
   notification: Pick<PresentableNotification, "event_type" | "title">,
 ): string {
-  return EVENT_LABELS[notification.event_type] ??
+  return (
+    EVENT_LABELS[notification.event_type] ??
     notification.title?.trim() ??
-    "Notificacion operacional";
+    "Notificacion operacional"
+  );
 }
 
 export function humanNotificationMessage(

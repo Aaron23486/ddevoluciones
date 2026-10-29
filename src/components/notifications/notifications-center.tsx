@@ -79,7 +79,10 @@ export function NotificationsCenter({ initialNotifications }: Props) {
     const schedule = () => {
       window.clearInterval(timer);
       if (document.visibilityState === "visible") {
-        timer = window.setInterval(() => void refresh(controller.signal), POLL_MS);
+        timer = window.setInterval(
+          () => void refresh(controller.signal),
+          POLL_MS,
+        );
       }
     };
 
@@ -108,7 +111,10 @@ export function NotificationsCenter({ initialNotifications }: Props) {
       window.clearInterval(timer);
       document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("focus", onFocus);
-      window.removeEventListener("ddevoluciones-notifications-refresh", onFocus);
+      window.removeEventListener(
+        "ddevoluciones-notifications-refresh",
+        onFocus,
+      );
       channel?.close();
     };
   }, [refresh]);
@@ -200,7 +206,9 @@ export function NotificationsCenter({ initialNotifications }: Props) {
 
         {syncIssue ? (
           <p className="dv-notifications-sync-error" role="status">
-            {"No se pudieron actualizar los avisos. Se intentar\u00e1 nuevamente."}
+            {
+              "No se pudieron actualizar los avisos. Se intentar\u00e1 nuevamente."
+            }
           </p>
         ) : null}
         <div className="dv-notifications-list">

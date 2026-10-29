@@ -18,9 +18,7 @@ describe("epica 5 premium UI UX contract", () => {
   });
 
   it("keeps admin full final navigation", () => {
-    expect(
-      FINAL_NAVIGATION_BY_ROLE.admin.map((item) => item.href),
-    ).toEqual([
+    expect(FINAL_NAVIGATION_BY_ROLE.admin.map((item) => item.href)).toEqual([
       "/dashboard",
       "/devoluciones",
       "/reportes-carga",

@@ -138,10 +138,7 @@ function resolvePeriod(input: {
   let to = endOfUtcDay(new Date());
   let from: Date;
 
-  if (
-    validDateOnly(input.from) &&
-    validDateOnly(input.to)
-  ) {
+  if (validDateOnly(input.from) && validDateOnly(input.to)) {
     const customFrom = startOfUtcDay(new Date(`${input.from}T00:00:00.000Z`));
     const customTo = endOfUtcDay(new Date(`${input.to}T00:00:00.000Z`));
 
@@ -150,13 +147,13 @@ function resolvePeriod(input: {
       to = customTo;
     } else {
       const days = [7, 30, 90].includes(input.days ?? 30)
-        ? input.days ?? 30
+        ? (input.days ?? 30)
         : 30;
       from = startOfUtcDay(addDays(to, -(days - 1)));
     }
   } else {
     const days = [7, 30, 90].includes(input.days ?? 30)
-      ? input.days ?? 30
+      ? (input.days ?? 30)
       : 30;
 
     from = startOfUtcDay(addDays(to, -(days - 1)));
@@ -166,9 +163,7 @@ function resolvePeriod(input: {
     Math.floor((to.getTime() - from.getTime()) / 86_400_000) + 1;
 
   const previousTo = endOfUtcDay(addDays(from, -1));
-  const previousFrom = startOfUtcDay(
-    addDays(previousTo, -(lengthDays - 1)),
-  );
+  const previousFrom = startOfUtcDay(addDays(previousTo, -(lengthDays - 1)));
 
   return {
     key: `${isoDate(from)}_${isoDate(to)}`,
@@ -181,20 +176,13 @@ function resolvePeriod(input: {
   };
 }
 
-function between(
-  value: string | null,
-  from: Date,
-  to: Date,
-): boolean {
+function between(value: string | null, from: Date, to: Date): boolean {
   if (!value) return false;
   const time = new Date(value).getTime();
   return time >= from.getTime() && time <= to.getTime();
 }
 
-function percentageChange(
-  current: number,
-  previous: number,
-): number | null {
+function percentageChange(current: number, previous: number): number | null {
   if (previous === 0) {
     return current === 0 ? 0 : null;
   }
@@ -313,9 +301,7 @@ function agingPoints<T>(
   isOpen: (row: T) => boolean,
   dateGetter: (row: T) => string,
 ): DashboardMetricPoint[] {
-  const map = new Map<string, number>(
-    AGING_ORDER.map((key) => [key, 0]),
-  );
+  const map = new Map<string, number>(AGING_ORDER.map((key) => [key, 0]));
 
   const now = Date.now();
 
@@ -324,9 +310,7 @@ function agingPoints<T>(
 
     const age = Math.max(
       0,
-      Math.floor(
-        (now - new Date(dateGetter(row)).getTime()) / 86_400_000,
-      ),
+      Math.floor((now - new Date(dateGetter(row)).getTime()) / 86_400_000),
     );
 
     const key = agingBucket(age);
@@ -360,10 +344,7 @@ function buildTrend<T>(
   resolvedDate: (row: T) => string | null,
 ): DashboardTrendPoint[] {
   const weekly = period.days > 45;
-  const map = new Map<
-    string,
-    { entries: number; resolved: number }
-  >();
+  const map = new Map<string, { entries: number; resolved: number }>();
 
   for (const row of rows) {
     const entryKey = bucketKey(new Date(entryDate(row)), weekly);
@@ -374,8 +355,7 @@ function buildTrend<T>(
     const resolved = resolvedDate(row);
     if (resolved) {
       const resolvedKey = bucketKey(new Date(resolved), weekly);
-      const resolvedPoint =
-        map.get(resolvedKey) ?? { entries: 0, resolved: 0 };
+      const resolvedPoint = map.get(resolvedKey) ?? { entries: 0, resolved: 0 };
       resolvedPoint.resolved += 1;
       map.set(resolvedKey, resolvedPoint);
     }
@@ -401,9 +381,7 @@ function agedOverSeven<T>(
   return rows.filter((row) => {
     if (!isOpen(row)) return false;
 
-    return (
-      (now - new Date(dateGetter(row)).getTime()) / 86_400_000 > 7
-    );
+    return (now - new Date(dateGetter(row)).getTime()) / 86_400_000 > 7;
   }).length;
 }
 
@@ -608,14 +586,7 @@ function buildDevolucionSnapshot(
         formatDuration(cycle),
         "violet",
       ),
-      kpi(
-        "aged",
-        "Mas de 7 dias",
-        aged,
-        previousAged,
-        String(aged),
-        "cyan",
-      ),
+      kpi("aged", "Mas de 7 dias", aged, previousAged, String(aged), "cyan"),
     ],
     states,
     trend: buildTrend(
@@ -647,7 +618,12 @@ function buildDevolucionSnapshot(
     ),
     physical: [],
     motives: [],
-    articles: metricPoints(countBy(current, (row) => row.articulo), {}, {}, 7),
+    articles: metricPoints(
+      countBy(current, (row) => row.articulo),
+      {},
+      {},
+      7,
+    ),
     carriers: metricPoints(
       countBy(current, (row) => row.transportista_nombre),
       {},
@@ -662,12 +638,7 @@ function buildDevolucionSnapshot(
     ),
     routes: [],
     clients: [],
-    attention: makeAttention(
-      aged,
-      bottleneck,
-      openChange,
-      closedChange,
-    ),
+    attention: makeAttention(aged, bottleneck, openChange, closedChange),
   };
 }
 
@@ -687,9 +658,7 @@ function buildCargaSnapshot(
     (row) => row.estado === "pendiente_redespacho",
   );
   const sent = current.filter((row) => row.estado === "redespachado");
-  const previousSent = previous.filter(
-    (row) => row.estado === "redespachado",
-  );
+  const previousSent = previous.filter((row) => row.estado === "redespachado");
 
   const rate = current.length > 0 ? (sent.length / current.length) * 100 : 0;
   const previousRate =
@@ -776,14 +745,7 @@ function buildCargaSnapshot(
         formatDuration(cycle),
         "cyan",
       ),
-      kpi(
-        "aged",
-        "Mas de 7 dias",
-        aged,
-        previousAged,
-        String(aged),
-        "red",
-      ),
+      kpi("aged", "Mas de 7 dias", aged, previousAged, String(aged), "red"),
     ],
     states,
     trend: buildTrend(
@@ -865,10 +827,7 @@ function makeSelectionSnapshots<T>(
     dimension: DashboardSelectionDimension,
     key: string,
   ) => T[],
-  build: (
-    currentRows: T[],
-    previousRows: T[],
-  ) => DashboardSnapshot,
+  build: (currentRows: T[], previousRows: T[]) => DashboardSnapshot,
 ): Record<string, DashboardSnapshot> {
   const result: Record<string, DashboardSnapshot> = {};
 
@@ -952,12 +911,8 @@ function splitPeriod<T>(
   dateGetter: (row: T) => string,
   period: DashboardPeriod,
 ): { current: T[]; previous: T[] } {
-  const currentFrom = startOfUtcDay(
-    new Date(`${period.from}T00:00:00.000Z`),
-  );
-  const currentTo = endOfUtcDay(
-    new Date(`${period.to}T00:00:00.000Z`),
-  );
+  const currentFrom = startOfUtcDay(new Date(`${period.from}T00:00:00.000Z`));
+  const currentTo = endOfUtcDay(new Date(`${period.to}T00:00:00.000Z`));
   const previousFrom = startOfUtcDay(
     new Date(`${period.previousFrom}T00:00:00.000Z`),
   );
@@ -983,10 +938,8 @@ export async function getExecutiveDashboardData(input: {
 }): Promise<ExecutiveDashboardData> {
   const period = resolvePeriod(input);
 
-  const combinedFrom =
-    `${period.previousFrom}T00:00:00.000Z`;
-  const combinedToExclusive =
-    `${isoDate(addDays(new Date(`${period.to}T00:00:00.000Z`), 1))}T00:00:00.000Z`;
+  const combinedFrom = `${period.previousFrom}T00:00:00.000Z`;
+  const combinedToExclusive = `${isoDate(addDays(new Date(`${period.to}T00:00:00.000Z`), 1))}T00:00:00.000Z`;
 
   const [devolucionesRows, cargaRows] = await Promise.all([
     fetchAllDevoluciones(combinedFrom, combinedToExclusive),
@@ -1020,11 +973,7 @@ export async function getExecutiveDashboardData(input: {
     ],
     filterDevoluciones,
     (currentRows, previousRows) =>
-      buildDevolucionSnapshot(
-        currentRows,
-        previousRows,
-        period,
-      ),
+      buildDevolucionSnapshot(currentRows, previousRows, period),
   );
 
   let carga: DashboardModeData | null = null;
@@ -1055,11 +1004,7 @@ export async function getExecutiveDashboardData(input: {
       ],
       filterCarga,
       (currentRows, previousRows) =>
-        buildCargaSnapshot(
-          currentRows,
-          previousRows,
-          period,
-        ),
+        buildCargaSnapshot(currentRows, previousRows, period),
     );
 
     carga = {

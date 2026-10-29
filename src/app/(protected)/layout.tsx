@@ -12,14 +12,16 @@ export default async function ProtectedLayout({
 }: Readonly<{ children: ReactNode }>) {
   const profile = await requireActiveProfile();
   const notifications = await getMyNotifications(12);
-const links = getFinalNavigation(profile.role);
+  const links = getFinalNavigation(profile.role);
 
   return (
     <div className="dv-app dx-app">
       <header className="dx-topbar-wrap">
         <div className="dx-topbar dv-glass">
           <div className="dx-brand">
-            <span className="dx-brand-mark" aria-hidden="true">DV</span>
+            <span className="dx-brand-mark" aria-hidden="true">
+              DV
+            </span>
             <div>
               <strong>Devoluciones</strong>
               <small>Sistema de trazabilidad</small>
@@ -33,7 +35,11 @@ const links = getFinalNavigation(profile.role);
 
             <details className="dx-profile-menu">
               <summary>
-                <span>{(profile.full_name ?? profile.email).slice(0, 1).toUpperCase()}</span>
+                <span>
+                  {(profile.full_name ?? profile.email)
+                    .slice(0, 1)
+                    .toUpperCase()}
+                </span>
                 <div>
                   <strong>{profile.full_name ?? "Usuario"}</strong>
                   <small>{profile.role}</small>

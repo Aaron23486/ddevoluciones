@@ -14,7 +14,9 @@
     "verify:demo-login": "node scripts/verify-demo-login.mjs",
     "verify:devoluciones": "node scripts/verify-devoluciones.mjs",
     "verify:reportes-carga": "node scripts/verify-reportes-carga.mjs",
-    "verify:security": "node scripts/verify-security.mjs"
+    "verify:security": "node scripts/verify-security.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -42,6 +44,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
     "jsdom": "^30.1.2",
+    "prettier": "3.9.10",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vite": "^8.3.1",
