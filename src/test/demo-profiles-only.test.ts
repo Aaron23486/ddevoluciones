@@ -9,7 +9,7 @@ function source(path: string): string {
 describe("demo profiles-only contract", () => {
   it("keeps admin access control and role/active actions", () => {
     const users = source("src/app/(protected)/usuarios/page.tsx");
-    expect(users).toContain('requireRole(["admin"])');
+    expect(users).toContain('requireRole(ROUTE_ROLES["/usuarios"])');
     expect(users).toContain("setUserActive");
     expect(users).toContain("setUserRole");
     expect(users).toContain('from("profiles")');

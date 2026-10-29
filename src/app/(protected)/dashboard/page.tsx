@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { OperationalDashboard } from "@/components/dashboard/operational-dashboard";
+import { canAccessRoute, getDefaultRoute } from "@/constants/permissions";
 import { requireActiveProfile } from "@/lib/auth/require-user";
 import { getExecutiveDashboardData } from "@/repositories/dashboard-analytics";
 import {
@@ -21,8 +22,8 @@ function one(value: string | string[] | undefined): string {
 export default async function DashboardPage({ searchParams }: Props) {
   const profile = await requireActiveProfile();
 
-  if (profile.role === "transportes" || profile.role === "seguridad") {
-    redirect("/reportes-carga");
+  if (!canAccessRoute(profile.role, "/dashboard")) {
+    redirect(getDefaultRoute(profile.role));
   }
 
   if (profile.role === "admin" || profile.role === "devoluciones") {

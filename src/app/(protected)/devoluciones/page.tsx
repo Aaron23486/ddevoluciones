@@ -10,6 +10,7 @@ import {
   locateMaterialAction,
   processInventoryAction,
 } from "@/features/devoluciones/actions";
+import { ROUTE_ROLES } from "@/constants/permissions";
 import { requireRole } from "@/lib/auth/require-user";
 import {
   getDevolucionDetail,
@@ -113,13 +114,7 @@ function paginationItems(
 }
 
 export default async function DevolucionesPage({ searchParams }: Props) {
-  const profile = await requireRole([
-    "admin",
-    "devoluciones",
-    "pesado",
-    "inventario",
-    "almacen",
-  ]);
+  const profile = await requireRole(ROUTE_ROLES["/devoluciones"]);
 
   const params = await searchParams;
   const page = Math.max(Number(one(params.page)) || 1, 1);

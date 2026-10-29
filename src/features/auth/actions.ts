@@ -1,6 +1,8 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { getDefaultRoute } from "@/constants/permissions";
+import { isUserRole } from "@/constants/roles";
 import { createClient } from "@/lib/supabase/server";
 import { signInSchema } from "@/schemas/auth";
 
@@ -43,16 +45,12 @@ export async function signIn(formData: FormData): Promise<void> {
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profileError || !profile?.is_active) {
+  if (profileError || !profile?.is_active || !isUserRole(profile.role)) {
     await supabase.auth.signOut();
     loginRedirect({ error: "inactive" });
   }
 
-  redirect(
-    profile?.role === "transportes" || profile?.role === "seguridad"
-      ? "/reportes-carga"
-      : "/dashboard",
-  );
+  redirect(getDefaultRoute(profile.role));
 }
 
 export async function signOut(): Promise<void> {
