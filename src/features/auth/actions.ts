@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { getDefaultRoute } from "@/constants/permissions";
 import { isUserRole } from "@/constants/roles";
+import { emailFingerprint, securityEvent } from "@/lib/security/events";
 import { createClient } from "@/lib/supabase/server";
 import { signInSchema } from "@/schemas/auth";
 
@@ -28,6 +29,9 @@ export async function signIn(formData: FormData): Promise<void> {
   });
 
   if (signInError) {
+    securityEvent("login.failed", {
+      emailFingerprint: emailFingerprint(parsed.data.email),
+    });
     loginRedirect({ error: "credentials" });
   }
 
@@ -46,6 +50,10 @@ export async function signIn(formData: FormData): Promise<void> {
     .maybeSingle();
 
   if (profileError || !profile?.is_active || !isUserRole(profile.role)) {
+    securityEvent(
+      profile ? "login.denied_inactive" : "login.denied_without_profile",
+      { userId: user.id },
+    );
     await supabase.auth.signOut();
     loginRedirect({ error: "inactive" });
   }
