@@ -3,12 +3,12 @@ begin;
 -- ==========================================================
 -- DDEVOLUCIONES / DEMO LOGIN
 -- Forward-only migration.
--- Removes the original corporate-domain restriction without
--- granting privileged access to public signups.
+-- Keeps account creation open to any valid email without
+-- granting privileged access to new accounts.
 -- ==========================================================
 
--- Compatibility function: the old name remains because migration 001
--- may already be deployed, but it no longer restricts corporate domains.
+-- Compatibility function: the name remains because migration 001
+-- may already be deployed; it only checks the email syntax.
 create or replace function public.is_allowed_company_email(p_email text)
 returns boolean
 language sql
