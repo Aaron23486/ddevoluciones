@@ -1,4 +1,4 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { USER_ROLES, type UserRole } from "@/constants/roles";
 
@@ -11,8 +11,7 @@ export type ActiveProfile = {
 };
 
 function isUserRole(value: unknown): value is UserRole {
-  return typeof value === "string" &&
-    USER_ROLES.includes(value as UserRole);
+  return typeof value === "string" && USER_ROLES.includes(value as UserRole);
 }
 
 export async function requireActiveProfile(): Promise<ActiveProfile> {

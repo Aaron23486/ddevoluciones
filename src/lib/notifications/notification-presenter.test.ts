@@ -37,6 +37,8 @@ describe("notification presenter", () => {
   });
 
   it("uses a readable fallback message", () => {
-    expect(humanNotificationMessage({ message: "" })).toContain("actualizacion");
+    expect(humanNotificationMessage({ message: "" })).toContain(
+      "actualizacion",
+    );
   });
 });

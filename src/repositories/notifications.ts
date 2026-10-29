@@ -1,4 +1,7 @@
-import { filterPersonallyClearedNotifications, NOTIFICATION_CLEARED_AT_KEY } from "@/lib/notifications/personal-clear";
+import {
+  filterPersonallyClearedNotifications,
+  NOTIFICATION_CLEARED_AT_KEY,
+} from "@/lib/notifications/personal-clear";
 import { createClient } from "@/lib/supabase/server";
 
 export type InternalNotificationRow = {

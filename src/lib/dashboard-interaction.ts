@@ -4,9 +4,7 @@ import type {
   DashboardSnapshot,
 } from "@/types/dashboard";
 
-export function dashboardSelectionKey(
-  selection: DashboardSelection,
-): string {
+export function dashboardSelectionKey(selection: DashboardSelection): string {
   return `${selection.dimension}:${selection.key}`;
 }
 
@@ -16,20 +14,14 @@ export function resolveDashboardSnapshot(
 ): DashboardSnapshot {
   if (!selection) return modeData.base;
 
-  return (
-    modeData.selections[dashboardSelectionKey(selection)] ??
-    modeData.base
-  );
+  return modeData.selections[dashboardSelectionKey(selection)] ?? modeData.base;
 }
 
 export function toggleDashboardSelection(
   current: DashboardSelection | null,
   next: DashboardSelection,
 ): DashboardSelection | null {
-  if (
-    current?.dimension === next.dimension &&
-    current.key === next.key
-  ) {
+  if (current?.dimension === next.dimension && current.key === next.key) {
     return null;
   }
 

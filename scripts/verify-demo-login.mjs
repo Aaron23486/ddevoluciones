@@ -38,13 +38,16 @@ for (const demo of DEMO_USERS) {
     },
   });
 
-  const { data: signInData, error: signInError } = await client.auth.signInWithPassword({
-    email: demo.email,
-    password,
-  });
+  const { data: signInData, error: signInError } =
+    await client.auth.signInWithPassword({
+      email: demo.email,
+      password,
+    });
 
   if (signInError || !signInData.user) {
-    throw new Error(`LOGIN FAIL ${demo.email}: ${signInError?.message ?? "no user"}`);
+    throw new Error(
+      `LOGIN FAIL ${demo.email}: ${signInError?.message ?? "no user"}`,
+    );
   }
 
   const { data: profile, error: profileError } = await client
@@ -57,7 +60,11 @@ for (const demo of DEMO_USERS) {
     throw new Error(`PROFILE FAIL ${demo.email}: ${profileError.message}`);
   }
 
-  if (profile.email !== demo.email || profile.role !== demo.role || profile.is_active !== true) {
+  if (
+    profile.email !== demo.email ||
+    profile.role !== demo.role ||
+    profile.is_active !== true
+  ) {
     throw new Error(
       `CONTRACT FAIL ${demo.email}: expected ${demo.role}/active, got ${profile.role}/${profile.is_active}`,
     );

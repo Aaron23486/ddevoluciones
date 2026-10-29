@@ -114,8 +114,7 @@ function SelectionLegend({
           key={item.key}
           type="button"
           className={
-            selection?.dimension === dimension &&
-            selection.key === item.key
+            selection?.dimension === dimension && selection.key === item.key
               ? "active"
               : ""
           }
@@ -146,8 +145,7 @@ function DonutChart({
     point: DashboardMetricPoint,
   ) => void;
 }) {
-  const shown =
-    selection?.dimension === dimension ? baseData : data;
+  const shown = selection?.dimension === dimension ? baseData : data;
 
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
@@ -224,17 +222,13 @@ function VerticalMetricBars({
     point: DashboardMetricPoint,
   ) => void;
 }) {
-  const shown =
-    selection?.dimension === dimension ? baseData : data;
+  const shown = selection?.dimension === dimension ? baseData : data;
 
   return (
     <div className="od-chart-interactive">
       <ResponsiveContainer width="100%" height={270}>
         <BarChart data={shown}>
-          <CartesianGrid
-            stroke="rgba(255,255,255,0.045)"
-            vertical={false}
-          />
+          <CartesianGrid stroke="rgba(255,255,255,0.045)" vertical={false} />
           <XAxis
             dataKey="label"
             tick={{ fill: "rgba(239,233,255,.58)", fontSize: 10 }}
@@ -250,10 +244,10 @@ function VerticalMetricBars({
           />
           <Tooltip
             formatter={(value, name) => [
-                `${String(value)} casos`,
-                String(name) === "value" ? "Cantidad" : String(name),
-              ]}
-              contentStyle={TOOLTIP_STYLE}
+              `${String(value)} casos`,
+              String(name) === "value" ? "Cantidad" : String(name),
+            ]}
+            contentStyle={TOOLTIP_STYLE}
             cursor={{ fill: "rgba(167,139,250,.04)" }}
           />
           <Bar dataKey="value" radius={[8, 8, 2, 2]}>
@@ -295,17 +289,13 @@ function HorizontalMetricBars({
   ) => void;
   height?: number;
 }) {
-  const shown =
-    selection?.dimension === dimension ? baseData : data;
+  const shown = selection?.dimension === dimension ? baseData : data;
 
   return (
     <div className="od-chart-interactive">
       <ResponsiveContainer width="100%" height={height}>
         <BarChart data={shown} layout="vertical" margin={{ left: 8 }}>
-          <CartesianGrid
-            stroke="rgba(255,255,255,0.045)"
-            horizontal={false}
-          />
+          <CartesianGrid stroke="rgba(255,255,255,0.045)" horizontal={false} />
           <XAxis
             type="number"
             tick={{ fill: "rgba(239,233,255,.48)", fontSize: 10 }}
@@ -323,10 +313,10 @@ function HorizontalMetricBars({
           />
           <Tooltip
             formatter={(value, name) => [
-                `${String(value)} casos`,
-                String(name) === "value" ? "Cantidad" : String(name),
-              ]}
-              contentStyle={TOOLTIP_STYLE}
+              `${String(value)} casos`,
+              String(name) === "value" ? "Cantidad" : String(name),
+            ]}
+            contentStyle={TOOLTIP_STYLE}
             cursor={{ fill: "rgba(167,139,250,.04)" }}
           />
           <Bar dataKey="value" radius={[0, 9, 9, 0]}>
@@ -355,10 +345,7 @@ function TrendChart({ snapshot }: { snapshot: DashboardSnapshot }) {
     <div className="od-chart-interactive">
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={snapshot.trend}>
-          <CartesianGrid
-            stroke="rgba(255,255,255,0.045)"
-            vertical={false}
-          />
+          <CartesianGrid stroke="rgba(255,255,255,0.045)" vertical={false} />
           <XAxis
             dataKey="label"
             tick={{ fill: "rgba(239,233,255,.52)", fontSize: 10 }}
@@ -373,10 +360,10 @@ function TrendChart({ snapshot }: { snapshot: DashboardSnapshot }) {
           />
           <Tooltip
             formatter={(value, name) => [
-                `${String(value)} casos`,
-                String(name) === "value" ? "Cantidad" : String(name),
-              ]}
-              contentStyle={TOOLTIP_STYLE}
+              `${String(value)} casos`,
+              String(name) === "value" ? "Cantidad" : String(name),
+            ]}
+            contentStyle={TOOLTIP_STYLE}
             cursor={{ stroke: "rgba(167,139,250,.18)" }}
           />
           <Line
@@ -401,8 +388,14 @@ function TrendChart({ snapshot }: { snapshot: DashboardSnapshot }) {
       </ResponsiveContainer>
 
       <div className="od-line-legend">
-        <span><i className="blue" />Entradas</span>
-        <span><i className="green" />Resueltos / salidas</span>
+        <span>
+          <i className="blue" />
+          Entradas
+        </span>
+        <span>
+          <i className="green" />
+          Resueltos / salidas
+        </span>
       </div>
     </div>
   );
@@ -437,9 +430,7 @@ function drillHref(
   selection: DashboardSelection | null,
 ): string {
   if (!selection) {
-    return mode === "devoluciones"
-      ? "/devoluciones"
-      : "/reportes-carga";
+    return mode === "devoluciones" ? "/devoluciones" : "/reportes-carga";
   }
 
   if (mode === "devoluciones") {
@@ -539,8 +530,7 @@ export function OperationalDashboard({
   const stateData =
     selection?.dimension === "state" ? base.states : snapshot.states;
 
-  const flowData =
-    selection?.dimension === "flow" ? base.flow : snapshot.flow;
+  const flowData = selection?.dimension === "flow" ? base.flow : snapshot.flow;
 
   const materialData =
     selection?.dimension === "material" ? base.material : snapshot.material;
@@ -635,8 +625,7 @@ export function OperationalDashboard({
               key={days}
               type="button"
               className={
-                data.period.days === days &&
-                !searchParams.has("from")
+                data.period.days === days && !searchParams.has("from")
                   ? "active"
                   : ""
               }
@@ -645,8 +634,6 @@ export function OperationalDashboard({
               {days} dias
             </button>
           ))}
-
-
         </div>
       </section>
 
@@ -659,9 +646,7 @@ export function OperationalDashboard({
           </div>
 
           <div>
-            <Link href={drillHref(mode, selection)}>
-              Ver casos
-            </Link>
+            <Link href={drillHref(mode, selection)}>Ver casos</Link>
             <button type="button" onClick={() => setSelection(null)}>
               Limpiar seleccion
             </button>
@@ -787,7 +772,10 @@ export function OperationalDashboard({
             )}
           </ChartCard>
         ) : (
-          <ChartCard eyebrow="Rutas" title="Rutas con mayor volumen de retornos">
+          <ChartCard
+            eyebrow="Rutas"
+            title="Rutas con mayor volumen de retornos"
+          >
             {routeData.length > 0 ? (
               <HorizontalMetricBars
                 data={snapshot.routes}
@@ -847,13 +835,11 @@ export function OperationalDashboard({
           <span className="od-eyebrow">Siguiente paso</span>
           <h2>Explorar la operacion</h2>
           <p>
-            Usa cualquier segmento o barra para aplicar cross-highlighting.
-            Las visualizaciones compatibles se recalculan con ese subconjunto.
+            Usa cualquier segmento o barra para aplicar cross-highlighting. Las
+            visualizaciones compatibles se recalculan con ese subconjunto.
           </p>
 
-          <Link href={drillHref(mode, selection)}>
-            Abrir casos operativos
-          </Link>
+          <Link href={drillHref(mode, selection)}>Abrir casos operativos</Link>
         </article>
       </section>
     </main>

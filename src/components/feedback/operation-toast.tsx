@@ -123,7 +123,8 @@ function OperationToastMessage({
       return (
         ERROR[error] ?? {
           title: "No se pudo completar",
-          message: "La operacion no se completo. Revisa los datos e intenta nuevamente.",
+          message:
+            "La operacion no se completo. Revisa los datos e intenta nuevamente.",
         }
       );
     }
@@ -154,7 +155,9 @@ function OperationToastMessage({
     next.delete("success");
     next.delete("error");
     const query = next.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    router.replace(query ? `${pathname}?${query}` : pathname, {
+      scroll: false,
+    });
   }, [error, params, pathname, router, success, visible]);
 
   if (!content || !visible) return null;
@@ -166,23 +169,23 @@ function OperationToastMessage({
       <div className="dv-operation-toast-backdrop" aria-hidden="true" />
       <div
         className={`dv-operation-toast${isError ? " error" : " success"}`}
-      role={isError ? "alert" : "status"}
-      aria-live={isError ? "assertive" : "polite"}
-    >
-      <span className="dv-operation-toast-icon" aria-hidden="true">
-        {isError ? <XCircle size={22} /> : <CheckCircle2 size={22} />}
-      </span>
-      <div>
-        <strong>{content.title}</strong>
-        <p>{content.message}</p>
-      </div>
-      <button
-        type="button"
-        onClick={() => setVisible(false)}
-        aria-label="Cerrar mensaje"
+        role={isError ? "alert" : "status"}
+        aria-live={isError ? "assertive" : "polite"}
       >
-        <X size={16} />
-      </button>
+        <span className="dv-operation-toast-icon" aria-hidden="true">
+          {isError ? <XCircle size={22} /> : <CheckCircle2 size={22} />}
+        </span>
+        <div>
+          <strong>{content.title}</strong>
+          <p>{content.message}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setVisible(false)}
+          aria-label="Cerrar mensaje"
+        >
+          <X size={16} />
+        </button>
       </div>
     </>
   );
