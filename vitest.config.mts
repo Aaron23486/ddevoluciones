@@ -18,6 +18,8 @@ export default defineConfig({
         "src/lib/cn.ts",
         "src/lib/dashboard-interaction.ts",
         "src/lib/notifications/**",
+        "src/lib/security/**",
+        "src/lib/supabase/cookie-options.ts",
         "src/schemas/**",
         "src/services/evidence-storage.ts",
         "scripts/lib/demo-data.mts",

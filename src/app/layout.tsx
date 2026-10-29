@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -19,9 +20,13 @@ export const metadata: Metadata = {
     "Trazabilidad de devoluciones, evidencias y reportes de carga con control de acceso por rol.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
+  // Todo se renderiza por solicitud: así cada respuesta lleva el nonce de su CSP
+  // (también la página 404, que de otro modo sería estática y sin nonce).
+  await connection();
+
   return (
     <html
       lang="es"
