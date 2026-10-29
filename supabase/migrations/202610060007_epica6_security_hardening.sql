@@ -5,13 +5,21 @@ begin;
 -- SECURITY HARDENING
 --
 -- 1. Prevent direct execution of the automatic RLS event
---    trigger function by application roles.
+--    trigger function by application roles. Hosted projects create
+--    it through the dashboard's "auto-enable RLS" option; a fresh
+--    database does not have it, so the revoke only runs when it exists.
 -- 2. Protect evidence already referenced by business records.
 -- ==========================================================
 
-revoke all
-on function public.rls_auto_enable()
-from public, anon, authenticated;
+do $$
+begin
+    if to_regprocedure('public.rls_auto_enable()') is not null then
+        revoke all
+        on function public.rls_auto_enable()
+        from public, anon, authenticated;
+    end if;
+end
+$$;
 
 
 -- ----------------------------------------------------------

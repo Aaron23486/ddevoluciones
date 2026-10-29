@@ -121,7 +121,9 @@ immutable
 security invoker
 set search_path = public
 as $$
-  select lower(split_part(trim(p_email), '@', 2)) in ('ologistics.com', 'cofersa.com');
+  select p_email is not null
+     and length(trim(p_email)) between 3 and 320
+     and trim(p_email) ~ '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$';
 $$;
 
 create or replace function public.map_area_to_role(p_area public.requestable_area)
@@ -191,7 +193,7 @@ begin
   v_area_text := nullif(trim(coalesce(new.raw_user_meta_data ->> 'requested_area', '')), '');
 
   if new.email is null or not public.is_allowed_company_email(new.email) then
-    raise exception 'Email domain is not allowed';
+    raise exception 'A valid email is required';
   end if;
 
   if v_name is null then
