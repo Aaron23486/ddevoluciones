@@ -11,8 +11,8 @@ const expectedRoles = [
   "seguridad",
 ];
 
-describe("role contract", () => {
-  it("contains exactly the seven confirmed application roles", () => {
+describe("roles (contrato)", () => {
+  it("contiene exactamente los siete roles de la aplicación", () => {
     expect([...USER_ROLES]).toEqual(expectedRoles);
   });
 });

@@ -6,8 +6,8 @@ function source(path: string): string {
   return readFileSync(join(process.cwd(), path), "utf8");
 }
 
-describe("demo profiles-only contract", () => {
-  it("keeps admin access control and role/active actions", () => {
+describe("acceso solo por perfiles (contrato)", () => {
+  it("conserva el control de admin y las acciones de rol y estado", () => {
     const users = source("src/app/(protected)/usuarios/page.tsx");
     expect(users).toContain('requireRole(ROUTE_ROLES["/usuarios"])');
     expect(users).toContain("setUserActive");
@@ -15,14 +15,14 @@ describe("demo profiles-only contract", () => {
     expect(users).toContain('from("profiles")');
   });
 
-  it("does not show or query access requests in Usuarios", () => {
+  it("Usuarios no muestra ni consulta solicitudes de acceso", () => {
     const users = source("src/app/(protected)/usuarios/page.tsx");
     expect(users).not.toMatch(
       /user_access_requests|safeRequests|approveAccessRequest|rejectAccessRequest|Solicitudes pendientes|<h2>Solicitudes<\/h2>/i,
     );
   });
 
-  it("login does not allow registration or request-based access", () => {
+  it("el login no permite registro ni solicitudes de acceso", () => {
     const login = source("src/app/login/page.tsx");
     const auth = source("src/features/auth/actions.ts");
     expect(login).toContain("signIn");
@@ -32,7 +32,7 @@ describe("demo profiles-only contract", () => {
     expect(auth).not.toContain('from("user_access_requests")');
   });
 
-  it("documents and seeds every demo role", () => {
+  it("documenta y crea cada rol de demostración", () => {
     const readme = source("README.md");
     const seed = source("scripts/lib/demo-data.mts");
     for (const role of [

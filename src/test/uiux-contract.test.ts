@@ -6,8 +6,8 @@ const FINAL_NAVIGATION_BY_ROLE = Object.fromEntries(
   USER_ROLES.map((role) => [role, getFinalNavigation(role)]),
 ) as Record<(typeof USER_ROLES)[number], ReturnType<typeof getFinalNavigation>>;
 
-describe("epica 5 premium UI UX contract", () => {
-  it("keeps only the four final application destinations", () => {
+describe("destinos de la interfaz (contrato)", () => {
+  it("solo ofrece los cuatro destinos finales", () => {
     const allowed = new Set([
       "/dashboard",
       "/devoluciones",
@@ -22,7 +22,7 @@ describe("epica 5 premium UI UX contract", () => {
     }
   });
 
-  it("keeps admin full final navigation", () => {
+  it("admin ve la navegación completa", () => {
     expect(FINAL_NAVIGATION_BY_ROLE.admin.map((item) => item.href)).toEqual([
       "/dashboard",
       "/devoluciones",

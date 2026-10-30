@@ -30,7 +30,7 @@ function emptySnapshot(total: number): DashboardSnapshot {
   };
 }
 
-describe("dashboard cross-highlighting", () => {
+describe("resaltado cruzado del dashboard", () => {
   const stateSelection: DashboardSelection = {
     dimension: "state",
     key: "pendiente_ubicar",
