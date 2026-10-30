@@ -243,3 +243,83 @@ describe("evidencias privadas", () => {
     }
   });
 });
+
+describe("entradas validadas en la base", () => {
+  const nueva = (overrides: Record<string, unknown>) => ({
+    p_factura: `IT-${RUN}-VAL`,
+    p_articulo: "Articulo",
+    p_cantidad: 1,
+    p_clasificacion: "bueno",
+    p_descripcion: "Prueba de validacion",
+    p_flujo: "pesado",
+    p_transportista_nombre: "Transportista",
+    p_transportista_cedula: "0-0000-0000",
+    p_placa_camion: "IT-001",
+    ...overrides,
+  });
+
+  it("una evidencia debe ser un archivo propio que exista", async () => {
+    const ajena = await env.upload(users.pesado);
+    const propia = await env.upload(users.devoluciones);
+
+    const conAjena = await rpc(
+      users.devoluciones.client,
+      "crear_devolucion",
+      nueva({ p_factura_path: ajena, p_material_path: propia }),
+    );
+    expect(conAjena.error).toMatch(/EVIDENCE_PATH_INVALID/);
+
+    const inexistente = await rpc(
+      users.devoluciones.client,
+      "crear_devolucion",
+      nueva({
+        p_factura_path: `${users.devoluciones.id}/it/no-existe.png`,
+        p_material_path: propia,
+      }),
+    );
+    expect(inexistente.error).toMatch(/EVIDENCE_PATH_INVALID/);
+  });
+
+  it("una evidencia de devoluciones no puede venir del área de reportes de carga", async () => {
+    const carga = await env.upload(users.admin, "reportes-carga");
+    const propia = await env.upload(users.admin);
+    const { error } = await rpc(
+      users.admin.client,
+      "crear_devolucion",
+      nueva({ p_factura_path: carga, p_material_path: propia }),
+    );
+    expect(error).toMatch(/EVIDENCE_PATH_INVALID/);
+  });
+
+  it("los textos tienen un largo máximo aunque se llame la RPC directamente", async () => {
+    const { error } = await rpc(
+      users.devoluciones.client,
+      "crear_devolucion",
+      nueva({
+        p_factura: `IT-${RUN}-${"x".repeat(200)}`,
+        p_factura_path: await env.upload(users.devoluciones),
+        p_material_path: await env.upload(users.devoluciones),
+      }),
+    );
+    expect(error).toMatch(/devoluciones_text_lengths/);
+  });
+
+  it("la analítica antigua ya no está disponible para las sesiones", async () => {
+    for (const role of ["admin", "devoluciones"] as const) {
+      const { error } = await rpc(
+        users[role].client,
+        "get_operational_analytics_ep4",
+        {
+          p_bucket: null,
+          p_modulo: null,
+          p_estado_devolucion: null,
+          p_flujo: null,
+          p_material: null,
+          p_mes: null,
+          p_estado_reporte: null,
+        },
+      );
+      expect(error, role).toMatch(/permission denied/);
+    }
+  });
+});
