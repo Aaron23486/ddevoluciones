@@ -42,3 +42,6 @@ yarn-error.log*
 next-env.d.ts
 supabase/.branches/
 supabase/.temp/
+/e2e/.auth/
+/e2e/test-results/
+/e2e/playwright-report/

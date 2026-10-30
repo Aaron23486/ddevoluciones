@@ -48,7 +48,8 @@ jobs:
           ghcr.io/gitleaks/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c9f602fb195b7fadc1e812065883f695d1eeaba854
           git /repo --redact --no-banner
 
-  # Migraciones sobre una base vacía, demo:setup y pruebas de integración contra el Supabase local.
+  # Migraciones sobre una base vacía, demo:setup, pruebas de integración contra el Supabase local
+  # y pruebas en navegador (con accesibilidad) sobre un build de producción.
   integration:
     runs-on: ubuntu-latest
     steps:
@@ -71,3 +72,13 @@ jobs:
           exit 1
       - run: npm run demo:setup
       - run: npm run test:integration
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            e2e/playwright-report
+            e2e/test-results
+          retention-days: 7
