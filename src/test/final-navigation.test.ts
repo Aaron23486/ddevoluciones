@@ -6,8 +6,8 @@ const FINAL_NAVIGATION_BY_ROLE = Object.fromEntries(
   USER_ROLES.map((role) => [role, getFinalNavigation(role)]),
 ) as Record<(typeof USER_ROLES)[number], ReturnType<typeof getFinalNavigation>>;
 
-describe("final navigation contract", () => {
-  it("contains only final application routes", () => {
+describe("navegación final (contrato)", () => {
+  it("solo contiene las rutas finales de la aplicación", () => {
     const allowed = new Set([
       "/dashboard",
       "/devoluciones",
@@ -22,7 +22,7 @@ describe("final navigation contract", () => {
     }
   });
 
-  it("removes former standalone operational routes", () => {
+  it("ya no incluye las rutas operativas antiguas", () => {
     const all = Object.values(FINAL_NAVIGATION_BY_ROLE)
       .flat()
       .map((item) => item.href);
@@ -34,7 +34,7 @@ describe("final navigation contract", () => {
     expect(all).not.toContain("/reportes");
   });
 
-  it("keeps report-load visibility for its active roles", () => {
+  it("muestra reporte de carga a sus roles", () => {
     expect(
       FINAL_NAVIGATION_BY_ROLE.inventario.some(
         (item) => item.href === "/reportes-carga",

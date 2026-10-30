@@ -1,0 +1,543 @@
+/* ----------------------------------------------------------
+   SELECTS: dark native controls with readable option menus
+   ---------------------------------------------------------- */
+
+select {
+  color-scheme: dark !important;
+  color: #f8f5ff !important;
+  background-color: #21192d !important;
+  border-radius: 11px !important;
+}
+
+select option,
+select optgroup {
+  color: #f8f5ff !important;
+  background: #1b1426 !important;
+}
+
+select option:checked {
+  color: #ffffff !important;
+  background: #6547a8 !important;
+}
+
+select:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.42) !important;
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------
+   MODAL FIELDS: softer edges across the whole application
+   ---------------------------------------------------------- */
+
+.dx-modal-card input:not([type="hidden"]),
+.dx-modal-card select,
+.dx-modal-card textarea,
+.dx-route-modal-card input:not([type="hidden"]),
+.dx-route-modal-card select,
+.dx-route-modal-card textarea,
+.dx-confirm-card input:not([type="hidden"]),
+.dx-confirm-card select,
+.dx-confirm-card textarea {
+  border-radius: 11px !important;
+}
+
+.dx-modal-card textarea,
+.dx-route-modal-card textarea {
+  border-radius: 12px !important;
+}
+
+.dx-evidence-card,
+.dx-evidence-item,
+.dx-evidence-picker,
+.dx-upload-zone {
+  border-radius: 14px !important;
+}
+
+/* ----------------------------------------------------------
+   NEW DEVOLUCION / NEW LOAD: stronger visual identity
+   ---------------------------------------------------------- */
+
+.dx-modal-card.context-devoluciones,
+.dx-modal-card.context-carga {
+  width: min(1040px, 96vw) !important;
+  border-radius: 26px !important;
+  overflow: hidden;
+}
+
+.dx-modal-card.context-devoluciones {
+  border-color: rgba(167, 139, 250, 0.24) !important;
+
+  box-shadow:
+    0 38px 110px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(139, 92, 246, 0.06),
+    0 0 44px rgba(124, 91, 210, 0.09) !important;
+}
+
+.dx-modal-card.context-carga {
+  border-color: rgba(96, 165, 250, 0.23) !important;
+
+  box-shadow:
+    0 38px 110px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(59, 130, 246, 0.05),
+    0 0 44px rgba(59, 130, 246, 0.08) !important;
+}
+
+.dx-modal-card.context-devoluciones::before,
+.dx-modal-card.context-carga::before {
+  content: "";
+
+  position: absolute;
+  inset: 0 auto 0 0;
+
+  width: 4px;
+
+  pointer-events: none;
+}
+
+.dx-modal-card.context-devoluciones::before {
+  background: linear-gradient(
+    180deg,
+    rgba(167, 139, 250, 0.95),
+    rgba(124, 58, 237, 0.16)
+  );
+}
+
+.dx-modal-card.context-carga::before {
+  background: linear-gradient(
+    180deg,
+    rgba(96, 165, 250, 0.95),
+    rgba(37, 99, 235, 0.15)
+  );
+}
+
+.dx-modal-heading-copy {
+  min-width: 0;
+}
+
+.dx-modal-context {
+  width: fit-content;
+  min-height: 25px;
+  padding: 0 9px;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+
+  font-size: 9px !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.8px !important;
+  text-transform: uppercase;
+}
+
+.dx-modal-context.tone-default {
+  color: #d8ccff;
+  border: 1px solid rgba(167, 139, 250, 0.14);
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.dx-modal-context.tone-devoluciones {
+  color: #e6ddff;
+  border: 1px solid rgba(167, 139, 250, 0.27);
+  background: rgba(139, 92, 246, 0.15);
+}
+
+.dx-modal-context.tone-carga {
+  color: #dbeafe;
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  background: rgba(59, 130, 246, 0.13);
+}
+
+.dx-modal-card.context-devoluciones .dx-modal-header,
+.dx-modal-card.context-carga .dx-modal-header {
+  padding-bottom: 17px;
+  margin-bottom: 4px;
+}
+
+/* ----------------------------------------------------------
+   CARD ACTION HIERARCHY
+   1 action -> full width
+   2 actions -> equal 50 / 50
+   ---------------------------------------------------------- */
+
+.v3-card-secondary-actions {
+  width: 100% !important;
+
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: minmax(0, 1fr) !important;
+  gap: 8px !important;
+}
+
+.v3-card-secondary-actions > *,
+.v3-card-secondary-actions > form,
+.v3-card-secondary-actions > button,
+.v3-card-secondary-actions .dx-modal-trigger,
+.v3-card-secondary-actions .dx-confirm-trigger,
+.v3-card-secondary-actions .v3-card-danger {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.v3-card-secondary-actions .dx-modal-trigger {
+  min-height: 42px !important;
+  padding: 0 12px !important;
+
+  border-radius: 12px !important;
+
+  color: #ffffff !important;
+
+  border: 1px solid rgba(167, 139, 250, 0.26) !important;
+
+  background: linear-gradient(
+    135deg,
+    rgba(113, 78, 190, 0.78),
+    rgba(79, 58, 145, 0.84)
+  ) !important;
+
+  box-shadow:
+    0 9px 22px rgba(70, 45, 130, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+
+  font-size: 11px !important;
+  font-weight: 900 !important;
+}
+
+.v3-card-secondary-actions .dx-modal-trigger:hover {
+  transform: translateY(-1px);
+
+  border-color: rgba(196, 181, 253, 0.36) !important;
+
+  background: linear-gradient(
+    135deg,
+    rgba(128, 89, 211, 0.88),
+    rgba(89, 64, 159, 0.9)
+  ) !important;
+}
+
+.v3-card-secondary-actions .v3-card-danger,
+.v3-card-secondary-actions .dx-confirm-trigger {
+  min-height: 42px !important;
+  padding: 0 12px !important;
+
+  border-radius: 12px !important;
+
+  color: #ffffff !important;
+
+  border: 1px solid rgba(248, 113, 113, 0.25) !important;
+
+  background: linear-gradient(
+    135deg,
+    rgba(165, 45, 65, 0.76),
+    rgba(117, 34, 52, 0.84)
+  ) !important;
+
+  box-shadow:
+    0 9px 22px rgba(112, 31, 48, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+
+  font-size: 11px !important;
+  font-weight: 900 !important;
+}
+
+.v3-card-secondary-actions .v3-card-danger:hover,
+.v3-card-secondary-actions .dx-confirm-trigger:hover {
+  transform: translateY(-1px);
+
+  border-color: rgba(252, 165, 165, 0.36) !important;
+
+  background: linear-gradient(
+    135deg,
+    rgba(184, 54, 76, 0.84),
+    rgba(132, 39, 58, 0.9)
+  ) !important;
+}
+
+.v3-card-primary-action {
+  border-radius: 12px !important;
+}
+
+/* ----------------------------------------------------------
+   DASHBOARD MODE: selected operation must be unmistakable
+   ---------------------------------------------------------- */
+
+.od-mode-tabs {
+  min-width: min(520px, 100%);
+
+  padding: 6px !important;
+  gap: 7px !important;
+
+  border-radius: 17px !important;
+
+  border: 1px solid rgba(167, 139, 250, 0.12) !important;
+  background: rgba(255, 255, 255, 0.025) !important;
+}
+
+.od-mode-tabs button {
+  min-height: 52px !important;
+  min-width: 190px;
+  padding: 0 22px !important;
+
+  position: relative;
+
+  border-radius: 13px !important;
+
+  color: rgba(239, 233, 255, 0.58) !important;
+
+  font-size: 13px !important;
+  font-weight: 900 !important;
+
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease !important;
+}
+
+.od-mode-tabs button::before {
+  content: "";
+
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+
+  border-radius: 999px;
+
+  background: rgba(216, 204, 255, 0.28);
+
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.035);
+}
+
+.od-mode-tabs button.active {
+  color: #ffffff !important;
+
+  border: 1px solid rgba(196, 181, 253, 0.42) !important;
+
+  background: linear-gradient(
+    135deg,
+    rgba(121, 83, 205, 0.55),
+    rgba(77, 54, 142, 0.5)
+  ) !important;
+
+  box-shadow:
+    0 12px 30px rgba(72, 45, 133, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(167, 139, 250, 0.07) !important;
+
+  transform: translateY(-1px);
+}
+
+.od-mode-tabs button.active::before {
+  background: #c4b5fd;
+
+  box-shadow:
+    0 0 0 4px rgba(167, 139, 250, 0.09),
+    0 0 15px rgba(167, 139, 250, 0.45);
+}
+
+/* ----------------------------------------------------------
+   DASHBOARD PERIOD FILTER in header
+   ---------------------------------------------------------- */
+
+.od-period-filter-card {
+  width: min(520px, 100%);
+  min-width: 430px;
+  padding: 13px;
+
+  border: 1px solid rgba(167, 139, 250, 0.14);
+  border-radius: 17px;
+
+  background:
+    linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(59, 130, 246, 0.03)),
+    rgba(255, 255, 255, 0.025);
+
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.od-period-filter-heading {
+  margin-bottom: 9px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.od-period-filter-heading span {
+  color: #cfc2ff;
+
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+.od-period-filter-heading strong {
+  color: rgba(249, 246, 255, 0.72);
+  font-size: 11px;
+}
+
+.od-period-filter-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+  gap: 8px;
+}
+
+.od-period-filter-fields label {
+  min-width: 0;
+
+  display: grid;
+  gap: 5px;
+}
+
+.od-period-filter-fields label > span {
+  color: rgba(239, 233, 255, 0.46);
+
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.od-period-filter-fields input {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 10px;
+
+  color: #ffffff;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 11px;
+
+  background: rgba(255, 255, 255, 0.04);
+
+  color-scheme: dark;
+}
+
+.od-period-filter-fields button {
+  min-height: 42px;
+  padding: 0 15px;
+
+  border-radius: 11px;
+
+  color: #ffffff;
+
+  border: 1px solid rgba(74, 222, 128, 0.2);
+
+  background: linear-gradient(
+    135deg,
+    rgba(29, 139, 87, 0.76),
+    rgba(22, 112, 72, 0.82)
+  );
+
+  font-size: 11px;
+  font-weight: 900;
+}
+
+/* ----------------------------------------------------------
+   RECHARTS: readable dark tooltip and axis text
+   ---------------------------------------------------------- */
+
+.od-page .recharts-default-tooltip {
+  padding: 10px 12px !important;
+
+  border: 1px solid rgba(167, 139, 250, 0.2) !important;
+  border-radius: 12px !important;
+
+  background: rgba(18, 13, 27, 0.98) !important;
+
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.42) !important;
+}
+
+.od-page .recharts-tooltip-label,
+.od-page .recharts-tooltip-item,
+.od-page .recharts-tooltip-item-name,
+.od-page .recharts-tooltip-item-value {
+  color: #f8f5ff !important;
+}
+
+.od-page .recharts-tooltip-label {
+  margin-bottom: 4px !important;
+
+  color: #d8ccff !important;
+
+  font-size: 11px !important;
+  font-weight: 900 !important;
+}
+
+.od-page .recharts-tooltip-item {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+.od-page .recharts-cartesian-axis-tick-value,
+.od-page .recharts-text,
+.od-page .recharts-label {
+  fill: rgba(245, 241, 255, 0.72) !important;
+}
+
+.od-page .recharts-cartesian-grid line {
+  stroke: rgba(255, 255, 255, 0.055) !important;
+}
+
+/* Keep mouse/touch clean; keyboard retains accessible focus. */
+.od-chart-interactive .recharts-wrapper:focus,
+.od-chart-interactive .recharts-surface:focus,
+.od-chart-interactive svg:focus,
+.od-chart-interactive *:focus:not(:focus-visible) {
+  outline: none !important;
+}
+
+.od-page button:focus-visible,
+.od-page a:focus-visible,
+.od-page input:focus-visible,
+.od-page select:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.45) !important;
+  outline-offset: 3px;
+}
+
+/* ----------------------------------------------------------
+   RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 1050px) {
+  .od-period-filter-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .od-mode-tabs {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .od-mode-tabs button {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 680px) {
+  .od-period-filter-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .od-period-filter-fields button {
+    grid-column: 1 / -1;
+  }
+
+  .od-mode-tabs {
+    grid-template-columns: 1fr !important;
+  }
+
+  .od-mode-tabs button {
+    width: 100%;
+  }
+
+  .v3-card-secondary-actions {
+    grid-auto-flow: column !important;
+    grid-auto-columns: minmax(0, 1fr) !important;
+  }
+}

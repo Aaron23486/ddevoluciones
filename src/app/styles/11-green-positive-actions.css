@@ -1,0 +1,88 @@
+/*
+  Positive / accepting actions only.
+  Destructive buttons (.danger) keep their existing red treatment.
+*/
+
+.dx-submit:not(.danger) {
+  min-height: 48px !important;
+  padding: 0 18px !important;
+
+  border: 1px solid rgba(74, 222, 128, 0.28) !important;
+  border-radius: 15px !important;
+
+  color: #f4fff7 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(29, 139, 87, 0.96),
+    rgba(22, 112, 72, 0.96)
+  ) !important;
+
+  box-shadow:
+    0 12px 28px rgba(15, 97, 60, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.08px;
+
+  cursor: pointer;
+
+  transition:
+    transform 170ms ease,
+    border-color 170ms ease,
+    background 170ms ease,
+    box-shadow 170ms ease,
+    filter 170ms ease !important;
+}
+
+.dx-submit:not(.danger):hover {
+  transform: translateY(-1px);
+
+  border-color: rgba(110, 231, 150, 0.42) !important;
+
+  background: linear-gradient(
+    135deg,
+    rgba(34, 158, 98, 0.98),
+    rgba(25, 126, 80, 0.98)
+  ) !important;
+
+  box-shadow:
+    0 16px 34px rgba(15, 97, 60, 0.32),
+    0 0 24px rgba(74, 222, 128, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09) !important;
+
+  filter: brightness(1.03);
+}
+
+.dx-submit:not(.danger):focus-visible {
+  outline: 3px solid rgba(74, 222, 128, 0.2) !important;
+  outline-offset: 3px;
+}
+
+.dx-submit:not(.danger):active {
+  transform: translateY(0);
+}
+
+/* Keep destructive actions visually distinct. */
+.dx-submit.danger {
+  border-radius: 15px !important;
+}
+
+/* Camera / upload source controls remain secondary, not green confirmation CTAs. */
+.dx-evidence-actions button {
+  border-radius: 13px !important;
+}
+
+/* Mobile positive actions stay large enough for touch. */
+@media (max-width: 640px) {
+  .dx-submit:not(.danger) {
+    min-height: 50px !important;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dx-submit:not(.danger) {
+    transition-duration: 0.001ms !important;
+  }
+}

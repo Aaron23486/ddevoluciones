@@ -9,7 +9,7 @@ import {
   redispatchReporteCargaSchema,
 } from "@/schemas/reportes-carga";
 
-describe("Epic 4 domain contract", () => {
+describe("dominio de reportes y analítica", () => {
   it("clasifica buckets de devoluciones", () => {
     expect(devolucionBucket("pendiente_entrega")).toBe("entrada");
     expect(devolucionBucket("recibida_bodega")).toBe("en_proceso");

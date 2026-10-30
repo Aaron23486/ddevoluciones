@@ -1,0 +1,777 @@
+/*
+  Scope:
+  - Usuarios
+  - Devoluciones
+  - Reporte de carga
+  - Profile dropdown
+  - Notifications dropdown
+
+  Dashboard content is intentionally excluded.
+*/
+
+/* ------------------------------------------------------------
+   1. Layering / overlays
+   ------------------------------------------------------------ */
+
+.dx-topbar-wrap {
+  z-index: 500 !important;
+}
+
+.dx-topbar {
+  isolation: isolate;
+}
+
+.dv-notifications-center,
+.dx-profile-menu {
+  position: relative;
+  z-index: 540;
+}
+
+.dv-notifications-center[open],
+.dx-profile-menu[open] {
+  z-index: 620;
+}
+
+.dv-notifications-panel {
+  position: absolute !important;
+  top: calc(100% + 10px) !important;
+  right: 0 !important;
+  left: auto !important;
+  z-index: 660 !important;
+  width: min(430px, calc(100vw - 32px)) !important;
+  max-height: min(560px, 72vh) !important;
+  overflow: hidden !important;
+  padding: 14px !important;
+  border: 1px solid rgba(221, 211, 255, 0.16) !important;
+  border-radius: 20px !important;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(125, 87, 196, 0.11),
+      transparent 34%
+    ),
+    #15101f !important;
+  -webkit-backdrop-filter: blur(28px) saturate(120%) !important;
+  backdrop-filter: blur(28px) saturate(120%) !important;
+  box-shadow:
+    0 30px 75px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.dv-notifications-header {
+  margin-bottom: 10px !important;
+  padding-bottom: 10px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.dv-notifications-header strong {
+  color: #fff !important;
+  font-size: 13px !important;
+}
+
+.dv-notifications-header small {
+  color: rgba(239, 233, 255, 0.6) !important;
+}
+
+.dv-notifications-list {
+  max-height: min(445px, 58vh) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  padding-right: 3px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(167, 139, 250, 0.35) transparent;
+}
+
+.dv-notification-item {
+  padding: 11px 12px !important;
+  border: 1px solid rgba(221, 211, 255, 0.085) !important;
+  border-radius: 14px !important;
+  background: #1d1628 !important;
+  box-shadow: none !important;
+}
+
+.dv-notification-item + .dv-notification-item {
+  margin-top: 7px !important;
+}
+
+.dv-notification-item.unread {
+  border-color: rgba(167, 139, 250, 0.2) !important;
+  background:
+    linear-gradient(90deg, rgba(139, 92, 246, 0.11), transparent 34%), #21182d !important;
+  box-shadow: inset 3px 0 0 rgba(167, 139, 250, 0.72) !important;
+}
+
+.dv-notification-item strong {
+  color: #fff !important;
+  font-size: 11px !important;
+}
+
+.dv-notification-item p {
+  margin: 4px 0 5px !important;
+  color: rgba(242, 237, 255, 0.73) !important;
+  font-size: 10px !important;
+  line-height: 1.45 !important;
+}
+
+.dv-notification-item small {
+  color: rgba(226, 218, 245, 0.48) !important;
+  font-size: 8px !important;
+}
+
+.dv-notifications-empty {
+  min-height: 90px !important;
+  border-radius: 14px !important;
+  background: #1b1525 !important;
+}
+
+.dx-profile-panel {
+  position: absolute !important;
+  top: calc(100% + 10px) !important;
+  right: 0 !important;
+  left: auto !important;
+  z-index: 650 !important;
+  width: 270px !important;
+  padding: 15px !important;
+  border: 1px solid rgba(221, 211, 255, 0.16) !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(125, 87, 196, 0.1),
+      transparent 34%
+    ),
+    #171120 !important;
+  -webkit-backdrop-filter: blur(28px) saturate(120%) !important;
+  backdrop-filter: blur(28px) saturate(120%) !important;
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.dx-profile-panel > strong {
+  color: #fff !important;
+  font-size: 13px !important;
+}
+
+.dx-profile-panel > small {
+  margin-top: 5px !important;
+  color: rgba(241, 235, 255, 0.63) !important;
+  font-size: 9px !important;
+}
+
+.dx-profile-panel > span {
+  margin-top: 7px !important;
+  color: rgba(241, 235, 255, 0.74) !important;
+  font-size: 9px !important;
+}
+
+.dx-profile-panel form {
+  margin-top: 13px !important;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+}
+
+.dx-profile-panel form button {
+  min-height: 44px !important;
+  width: 100% !important;
+  border: 1px solid rgba(248, 113, 113, 0.25) !important;
+  border-radius: 13px !important;
+  color: #fff !important;
+  background: linear-gradient(180deg, #542236, #421a2a) !important;
+  box-shadow:
+    0 10px 24px rgba(67, 22, 40, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  transition:
+    transform 170ms ease,
+    border-color 170ms ease,
+    background 170ms ease,
+    box-shadow 170ms ease !important;
+}
+
+.dx-profile-panel form button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(252, 165, 165, 0.42) !important;
+  background: linear-gradient(180deg, #652940, #4d1d30) !important;
+  box-shadow: 0 14px 30px rgba(67, 22, 40, 0.38) !important;
+}
+
+.dx-modal-backdrop,
+.dx-route-modal {
+  z-index: 900 !important;
+}
+
+/* ------------------------------------------------------------
+   2. Usuarios: density without miniaturizing
+   ------------------------------------------------------------ */
+
+.dx-users-page {
+  gap: 12px !important;
+}
+
+.dx-users-hero {
+  min-height: 116px !important;
+  padding: 20px 22px !important;
+  border-radius: 24px !important;
+}
+
+.dx-users-hero h1 {
+  margin-bottom: 6px !important;
+  font-size: clamp(34px, 3.2vw, 46px) !important;
+}
+
+.dx-users-hero p {
+  max-width: 720px !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+.dx-users-hero-mark {
+  width: 54px !important;
+  height: 54px !important;
+  flex-basis: 54px !important;
+  border-radius: 17px !important;
+}
+
+.dx-users-kpis {
+  gap: 8px !important;
+}
+
+.dx-user-kpi {
+  min-height: 70px !important;
+  padding: 10px 12px !important;
+  gap: 10px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12) !important;
+}
+
+.dx-user-kpi-icon {
+  width: 36px !important;
+  height: 36px !important;
+  flex-basis: 36px !important;
+  border-radius: 11px !important;
+}
+
+.dx-user-kpi span {
+  font-size: 8px !important;
+}
+
+.dx-user-kpi strong {
+  margin-top: 1px !important;
+  font-size: 22px !important;
+}
+
+.dx-users-section {
+  padding: 14px !important;
+  border-radius: 21px !important;
+}
+
+.dx-users-section-head {
+  margin-bottom: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.dx-users-section-head h2 {
+  font-size: 20px !important;
+}
+
+.dx-users-section-head p {
+  margin-top: 3px !important;
+  font-size: 9px !important;
+}
+
+.dx-users-empty {
+  min-height: 72px !important;
+  padding: 10px 14px !important;
+  grid-template-columns: auto auto 1fr !important;
+  grid-auto-flow: column;
+  justify-content: start;
+  align-content: center;
+  place-items: center start;
+  gap: 8px !important;
+  text-align: left;
+  border-radius: 13px !important;
+}
+
+.dx-users-empty svg {
+  color: #a78bfa;
+}
+
+.dx-users-empty strong {
+  font-size: 10px !important;
+}
+
+.dx-users-empty p {
+  font-size: 9px !important;
+}
+
+.dx-request-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.dx-request-card {
+  padding: 11px !important;
+  border-radius: 15px !important;
+}
+
+.dx-request-meta {
+  margin-top: 8px !important;
+  gap: 5px !important;
+}
+
+.dx-request-actions {
+  margin-top: 8px !important;
+  padding-top: 8px !important;
+}
+
+.dx-profile-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.dx-profile-card {
+  min-height: 0 !important;
+  padding: 11px !important;
+  border-radius: 15px !important;
+}
+
+.dx-avatar.large {
+  width: 39px !important;
+  height: 39px !important;
+  flex-basis: 39px !important;
+  border-radius: 12px !important;
+}
+
+.dx-profile-identity strong {
+  font-size: 10px !important;
+}
+
+.dx-profile-identity span {
+  font-size: 8px !important;
+}
+
+.dx-profile-status {
+  padding: 5px 7px !important;
+  font-size: 7px !important;
+}
+
+.dx-profile-role {
+  margin-top: 9px !important;
+  padding: 8px !important;
+  border-radius: 11px !important;
+}
+
+.dx-profile-role-label {
+  font-size: 8px !important;
+}
+
+.dx-role-form {
+  margin-top: 6px !important;
+  gap: 5px !important;
+}
+
+.dx-role-form select {
+  min-height: 38px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.dx-user-action {
+  min-height: 38px !important;
+  padding: 0 10px !important;
+}
+
+.dx-profile-footer {
+  margin-top: 8px !important;
+  padding-top: 8px !important;
+}
+
+.dx-profile-footer > span {
+  font-size: 8px !important;
+}
+
+/* ------------------------------------------------------------
+   3. Operational list views: Devoluciones + Reporte de carga
+   Dashboard is excluded using :has(.dx-list-layout)
+   ------------------------------------------------------------ */
+
+.dx-module-page:has(.dx-list-layout) {
+  gap: 12px !important;
+}
+
+.dx-module-page:has(.dx-list-layout) > .dx-hero {
+  min-height: 126px !important;
+  padding: 20px 24px !important;
+  border-radius: 24px !important;
+}
+
+.dx-module-page:has(.dx-list-layout) > .dx-hero h1 {
+  margin-bottom: 6px !important;
+  font-size: clamp(35px, 3.35vw, 48px) !important;
+}
+
+.dx-module-page:has(.dx-list-layout) > .dx-hero p {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+.dx-module-page:has(.dx-list-layout) > .dx-hero .dx-modal-trigger {
+  min-height: 40px !important;
+  padding: 0 13px !important;
+}
+
+.dx-module-page:has(.dx-load-layout) > .dx-kpi-grid {
+  gap: 8px !important;
+}
+
+.dx-module-page:has(.dx-load-layout) > .dx-kpi-grid .dx-kpi {
+  min-height: 78px !important;
+  padding: 11px 13px !important;
+  border-radius: 16px !important;
+}
+
+.dx-module-page:has(.dx-load-layout) > .dx-kpi-grid .dx-kpi span {
+  font-size: 8px !important;
+}
+
+.dx-module-page:has(.dx-load-layout) > .dx-kpi-grid .dx-kpi strong {
+  margin-top: 4px !important;
+  font-size: 26px !important;
+}
+
+.dx-filter-panel {
+  padding: 13px 15px !important;
+  border-radius: 19px !important;
+}
+
+.dx-filter-head {
+  margin-bottom: 9px !important;
+}
+
+.dx-filter-head h2 {
+  font-size: 18px !important;
+}
+
+.dx-filter-head > strong {
+  padding: 5px 7px !important;
+  font-size: 8px !important;
+}
+
+.dx-filter-form {
+  grid-template-columns: repeat(16, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.dx-filter-form > label:first-child {
+  grid-column: span 4 !important;
+}
+
+.dx-filter-form > label {
+  grid-column: span 2 !important;
+}
+
+.dx-filter-form label > span {
+  margin-bottom: 1px;
+  font-size: 8px !important;
+}
+
+.dx-date-grid {
+  grid-column: span 4 !important;
+  gap: 7px !important;
+}
+
+.dx-filter-form input,
+.dx-filter-form select,
+.dx-date-grid input {
+  min-height: 42px !important;
+}
+
+.dx-filter-apply,
+.dx-filter-clear {
+  min-height: 42px !important;
+  font-size: 9px !important;
+}
+
+.dx-filter-apply {
+  grid-column: span 1 !important;
+}
+
+.dx-filter-clear {
+  grid-column: span 1 !important;
+}
+
+/* Reporte de carga has fewer filter fields, so use all available width. */
+
+.dx-load-layout .dx-filter-form {
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+}
+
+.dx-load-layout .dx-filter-form > label:first-child {
+  grid-column: span 4 !important;
+}
+
+.dx-load-layout .dx-filter-form > label {
+  grid-column: span 2 !important;
+}
+
+.dx-load-layout .dx-date-grid {
+  grid-column: span 4 !important;
+}
+
+.dx-load-layout .dx-filter-apply,
+.dx-load-layout .dx-filter-clear {
+  grid-column: span 1 !important;
+}
+
+.dx-list-panel {
+  min-height: 0 !important;
+  padding: 15px 16px !important;
+  border-radius: 21px !important;
+}
+
+.dx-list-head {
+  margin-bottom: 12px !important;
+  padding-bottom: 10px !important;
+}
+
+.dx-list-head h2 {
+  font-size: 20px !important;
+}
+
+.dx-list-head p {
+  margin-top: 3px !important;
+  font-size: 9px !important;
+}
+
+.dx-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.dx-case-card {
+  min-height: 228px !important;
+  padding: 14px !important;
+  border-radius: 17px !important;
+}
+
+.dx-case-card h3 {
+  font-size: 16px !important;
+}
+
+.dx-case-card-head > div > span {
+  margin-bottom: 3px !important;
+  font-size: 8px !important;
+}
+
+.dx-state {
+  max-width: 132px !important;
+  padding: 5px 7px !important;
+  font-size: 7px !important;
+}
+
+.dx-case-metrics {
+  margin-top: 10px !important;
+  gap: 5px !important;
+}
+
+.dx-case-metrics > div {
+  min-height: 48px !important;
+  padding: 8px !important;
+  border-radius: 10px !important;
+}
+
+.dx-case-metrics span {
+  font-size: 7px !important;
+}
+
+.dx-case-metrics strong {
+  font-size: 9px !important;
+}
+
+.dx-case-description {
+  min-height: 30px !important;
+  margin-top: 9px !important;
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+.dx-case-meta {
+  margin-top: 8px !important;
+  font-size: 8px !important;
+}
+
+.dx-case-actions {
+  padding-top: 9px !important;
+  gap: 5px !important;
+}
+
+.dx-detail-link,
+.dx-modal-trigger,
+.dx-danger-button {
+  min-height: 34px !important;
+  padding: 0 9px !important;
+  border-radius: 10px !important;
+  font-size: 8px !important;
+}
+
+.dx-pagination {
+  margin-top: 12px !important;
+}
+
+/* ------------------------------------------------------------
+   4. Responsive
+   ------------------------------------------------------------ */
+
+@media (max-width: 1660px) {
+  .dx-profile-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .dx-request-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .dx-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 1180px) {
+  .dx-users-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .dx-profile-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .dx-filter-form,
+  .dx-load-layout .dx-filter-form {
+    grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  }
+
+  .dx-filter-form > label:first-child,
+  .dx-load-layout .dx-filter-form > label:first-child {
+    grid-column: span 4 !important;
+  }
+
+  .dx-filter-form > label,
+  .dx-load-layout .dx-filter-form > label {
+    grid-column: span 2 !important;
+  }
+
+  .dx-date-grid,
+  .dx-load-layout .dx-date-grid {
+    grid-column: span 4 !important;
+  }
+
+  .dx-filter-apply,
+  .dx-filter-clear,
+  .dx-load-layout .dx-filter-apply,
+  .dx-load-layout .dx-filter-clear {
+    grid-column: span 2 !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .dx-request-grid,
+  .dx-profile-grid,
+  .dx-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dx-users-hero,
+  .dx-module-page:has(.dx-list-layout) > .dx-hero {
+    min-height: 0 !important;
+    padding: 18px !important;
+  }
+
+  .dx-filter-form,
+  .dx-load-layout .dx-filter-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .dx-filter-form > label:first-child,
+  .dx-filter-form > label,
+  .dx-load-layout .dx-filter-form > label:first-child,
+  .dx-load-layout .dx-filter-form > label,
+  .dx-date-grid,
+  .dx-load-layout .dx-date-grid,
+  .dx-filter-apply,
+  .dx-filter-clear,
+  .dx-load-layout .dx-filter-apply,
+  .dx-load-layout .dx-filter-clear {
+    grid-column: span 1 !important;
+  }
+
+  .dx-date-grid,
+  .dx-load-layout .dx-date-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .dv-notifications-panel {
+    position: fixed !important;
+    top: 84px !important;
+    right: 16px !important;
+    left: 16px !important;
+    width: auto !important;
+    max-height: calc(100vh - 104px) !important;
+  }
+
+  .dx-profile-panel {
+    position: fixed !important;
+    top: 84px !important;
+    right: 16px !important;
+    left: auto !important;
+    width: min(290px, calc(100vw - 32px)) !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .dx-users-kpis {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .dx-filter-form,
+  .dx-load-layout .dx-filter-form {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dx-filter-form > *,
+  .dx-load-layout .dx-filter-form > *,
+  .dx-date-grid,
+  .dx-load-layout .dx-date-grid {
+    grid-column: 1 !important;
+  }
+
+  .dx-date-grid,
+  .dx-load-layout .dx-date-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dx-users-empty {
+    grid-template-columns: auto 1fr !important;
+    grid-auto-flow: row;
+  }
+
+  .dx-users-empty p {
+    grid-column: 1 / -1;
+  }
+
+  .dx-profile-footer {
+    gap: 6px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dx-profile-panel,
+  .dv-notifications-panel,
+  .dx-case-card,
+  .dx-profile-card,
+  .dx-request-card {
+    animation: none !important;
+    transition-duration: 0.001ms !important;
+  }
+}
