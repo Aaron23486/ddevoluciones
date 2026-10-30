@@ -30,6 +30,11 @@ export const BUCKET = "devoluciones";
 export const RUN = `${Date.now().toString(36)}${randomBytes(2).toString("hex")}`;
 export const PNG = demoEvidencePng([120, 120, 120], 16, 16);
 
+// Contraseña válida generada en cada ejecución (12+ caracteres con letras y números).
+export function testPassword(): string {
+  return `It-${randomBytes(12).toString("base64url")}1a`;
+}
+
 let counter = 0;
 
 // Referencias de prueba con prefijo IT- (las de demostración usan DEMO-).

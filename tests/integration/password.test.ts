@@ -4,7 +4,7 @@ import {
   setPassword,
   signedInClient,
 } from "../../scripts/lib/supabase-local.mts";
-import { rpc, TestEnvironment } from "./support";
+import { rpc, TestEnvironment, testPassword } from "./support";
 
 const env = new TestEnvironment();
 
@@ -16,7 +16,7 @@ describe("contraseñas solo desde la terminal", () => {
   it("una sesión no puede cambiar su propia contraseña", async () => {
     const account = await env.account("pesado");
     const { error } = await account.client.auth.updateUser({
-      password: "Otra-Clave-Segura-2026",
+      password: testPassword(),
     });
     expect(error).not.toBeNull();
     await expect(
@@ -27,14 +27,14 @@ describe("contraseñas solo desde la terminal", () => {
   it("la API de administración de Auth tampoco cambia contraseñas", async () => {
     const account = await env.account("inventario");
     const { error } = await env.service.auth.admin.updateUserById(account.id, {
-      password: "Otra-Clave-Segura-2026",
+      password: testPassword(),
     });
     expect(error).not.toBeNull();
   });
 
   it("la función de terminal la cambia y cierra las sesiones abiertas", async () => {
     const account = await env.account("almacen");
-    const nueva = "Nueva-Clave-Segura-2026";
+    const nueva = testPassword();
 
     await setPassword(env.service, account.id, nueva);
 
@@ -56,7 +56,7 @@ describe("contraseñas solo desde la terminal", () => {
     ).rejects.toThrow(/22023/);
     const { error } = await rpc(account.client, "terminal_set_password", {
       p_user_id: account.id,
-      p_password: "Nueva-Clave-Segura-2026",
+      p_password: testPassword(),
     });
     expect(error).not.toBeNull();
   });
