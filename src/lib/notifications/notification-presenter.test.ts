@@ -5,8 +5,8 @@ import {
   humanNotificationTitle,
 } from "./notification-presenter";
 
-describe("notification presenter", () => {
-  it("never exposes known technical event names as the visible title", () => {
+describe("presentación de notificaciones (contrato)", () => {
+  it("nunca muestra nombres técnicos de eventos como título", () => {
     expect(
       humanNotificationTitle({
         event_type: "reporte_carga_enviado",
@@ -22,7 +22,7 @@ describe("notification presenter", () => {
     ).toBe("Material pendiente de ubicacion");
   });
 
-  it("keeps a safe human fallback for unknown events", () => {
+  it("usa un título legible para eventos desconocidos", () => {
     expect(
       humanNotificationTitle({
         event_type: "future_event",
@@ -31,12 +31,12 @@ describe("notification presenter", () => {
     ).toBe("Actualizacion operacional");
   });
 
-  it("formats dates for Costa Rica", () => {
+  it("formatea fechas para Costa Rica", () => {
     const formatted = formatNotificationDate("2026-10-06T23:42:00.000Z");
     expect(formatted).toContain("2026");
   });
 
-  it("uses a readable fallback message", () => {
+  it("usa un mensaje legible por defecto", () => {
     expect(humanNotificationMessage({ message: "" })).toContain(
       "actualizacion",
     );

@@ -4,7 +4,7 @@ import {
   validateMixedQuantities,
 } from "@/domain/devoluciones/state-machine";
 
-describe("Epic 3 domain contract", () => {
+describe("dominio de devoluciones", () => {
   it("valida cantidades mixtas", () => {
     expect(validateMixedQuantities(10, 6, 4)).toBe(true);
     expect(validateMixedQuantities(10, 6, 3)).toBe(false);
