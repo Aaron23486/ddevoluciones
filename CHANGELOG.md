@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-29
+
 ### Added
 
 - Local Supabase stack with `db:up`, `db:down`, `db:reset`, `db:status` and `env:local`; every migration applies to an empty database.
@@ -18,6 +20,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - One route access map drives page guards, navigation and redirects.
 - The largest pages, the dashboard, its analytics and the stylesheet are split into cohesive modules without visual changes.
 - Unused dependencies, duplicated SQL bundles and dead components were removed.
+- 936 unused CSS selectors were removed; screenshots of every screen are byte-identical before and after.
+- Minor and patch dependency updates (React 19.3, supabase-js 2.118, Vitest 5.0.5).
 
 ### Removed
 
@@ -45,3 +49,6 @@ All notable changes to this project are documented here. The format follows [Kee
 - Load reports with redispatch and voiding.
 - Private photo evidence, notifications, executive dashboard and user administration.
 - Seven roles enforced with row-level security and `SECURITY DEFINER` functions.
+
+[Unreleased]: https://github.com/Aaron23486/ddevoluciones/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Aaron23486/ddevoluciones/releases/tag/v1.0.0

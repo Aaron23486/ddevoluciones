@@ -1,6 +1,6 @@
 # Contraseñas ficticias que las pruebas de integración usaban como literales; nunca fueron
-# credenciales reales y desde ci/add-quality-pipeline se generan en cada ejecución.
-16dfc5aeb941489651747f78ff43968961918464:tests/integration/password.test.ts:generic-api-key:19
-16dfc5aeb941489651747f78ff43968961918464:tests/integration/password.test.ts:generic-api-key:30
-16dfc5aeb941489651747f78ff43968961918464:tests/integration/password.test.ts:generic-api-key:59
-9bf6ca63b43ae83e8a825c4d1739776ef8394fe0:tests/integration/security.test.ts:generic-api-key:117
+# credenciales reales y ahora se generan en cada ejecución.
+9663d905247bdccecf96639388d5b8bf2eb99664:tests/integration/password.test.ts:generic-api-key:19
+9663d905247bdccecf96639388d5b8bf2eb99664:tests/integration/password.test.ts:generic-api-key:30
+9663d905247bdccecf96639388d5b8bf2eb99664:tests/integration/password.test.ts:generic-api-key:59
+bc2c826994720bf2313b99ce034a4a3d9b019d44:tests/integration/security.test.ts:generic-api-key:117
