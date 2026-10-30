@@ -1,0 +1,58 @@
+.dv-notifications-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dv-notifications-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.dv-notifications-tools form {
+  margin: 0;
+}
+
+.dv-notifications-tools .dv-mini-button,
+.dv-notifications-tools .dx-confirm-trigger {
+  min-height: 35px !important;
+  padding: 0 11px !important;
+  border-radius: 11px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.dv-notifications-tools .dx-confirm-trigger {
+  color: #fecaca !important;
+  border: 1px solid rgba(248, 113, 113, 0.27) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(148, 38, 59, 0.24),
+    rgba(112, 28, 46, 0.3)
+  ) !important;
+}
+
+.dv-notifications-tools .dx-confirm-trigger:hover {
+  background: rgba(153, 27, 27, 0.33) !important;
+  border-color: rgba(252, 165, 165, 0.4) !important;
+}
+
+@media (max-width: 480px) {
+  .dv-notifications-tools {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dv-notifications-tools * {
+    transition-duration: 0.001ms !important;
+  }
+}

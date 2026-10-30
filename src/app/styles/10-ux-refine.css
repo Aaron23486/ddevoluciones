@@ -1,0 +1,538 @@
+/* ----------------------------------------------------------
+   Usuarios: legibilidad sin alterar layout
+   ---------------------------------------------------------- */
+
+.v2-user-identity strong {
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+}
+
+.v2-user-identity span {
+  margin-top: 4px !important;
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+.v2-user-role-current span {
+  font-size: 10px !important;
+  letter-spacing: 0.35px !important;
+}
+
+.v2-user-role-current strong {
+  margin-top: 4px !important;
+  font-size: 12px !important;
+}
+
+.v2-user-role-form select,
+.v2-user-filters input,
+.v2-user-filters select {
+  font-size: 13px !important;
+}
+
+.v2-user-status > span {
+  padding: 6px 9px !important;
+  font-size: 10px !important;
+}
+
+.v2-user-status small {
+  margin-top: 5px !important;
+  font-size: 10px !important;
+}
+
+.v2-user-row .v2-button {
+  min-height: 40px !important;
+  font-size: 11px !important;
+}
+
+.v2-section-heading h2 {
+  font-size: 21px !important;
+}
+
+.v2-header-summary span {
+  font-size: 10px !important;
+}
+
+.v2-header-summary strong {
+  font-size: 22px !important;
+}
+
+.v2-empty-compact strong {
+  font-size: 12px !important;
+}
+
+.v2-empty-compact span {
+  font-size: 10px !important;
+}
+
+/* ----------------------------------------------------------
+   CTA principal de modulo
+   ---------------------------------------------------------- */
+
+.v3-page-header > .dx-modal-trigger {
+  min-height: 52px !important;
+  padding: 0 22px !important;
+  border-radius: 15px !important;
+
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+
+  border: 1px solid rgba(196, 181, 253, 0.3) !important;
+
+  background: linear-gradient(
+    135deg,
+    rgba(127, 88, 210, 0.82),
+    rgba(91, 61, 164, 0.76)
+  ) !important;
+
+  box-shadow:
+    0 14px 32px rgba(73, 42, 140, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.v3-page-header > .dx-modal-trigger:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 18px 38px rgba(73, 42, 140, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09) !important;
+}
+
+/* ----------------------------------------------------------
+   Modal/backdrop: prioridad total sobre contenido
+   ---------------------------------------------------------- */
+
+.dx-modal-backdrop,
+.dx-route-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1000 !important;
+
+  padding: 22px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  overflow-y: auto !important;
+
+  background: rgba(4, 2, 10, 0.84) !important;
+
+  -webkit-backdrop-filter: blur(11px) saturate(82%) !important;
+
+  backdrop-filter: blur(11px) saturate(82%) !important;
+}
+
+.dx-modal-card,
+.dx-route-modal-card,
+.dx-confirm-card {
+  position: relative !important;
+  z-index: 1010 !important;
+
+  max-height: calc(100vh - 44px) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+
+  border: 1px solid rgba(221, 211, 255, 0.14) !important;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(120, 83, 191, 0.12),
+      transparent 32%
+    ),
+    #171120 !important;
+
+  box-shadow:
+    0 38px 100px rgba(0, 0, 0, 0.68),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.dx-modal-card:focus,
+.dx-route-modal-card:focus,
+.dx-confirm-card:focus {
+  outline: 2px solid rgba(167, 139, 250, 0.38);
+  outline-offset: 2px;
+}
+
+.dx-modal-header > div > span {
+  font-size: 10px !important;
+  letter-spacing: 0.8px !important;
+}
+
+.dx-modal-header h2 {
+  font-size: 23px !important;
+  line-height: 1.18 !important;
+}
+
+.dx-modal-header p {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
+.dx-modal-close {
+  width: 42px !important;
+  height: 42px !important;
+  flex-basis: 42px !important;
+  font-size: 13px !important;
+}
+
+/* Formularios operativos dentro de modal */
+
+.dx-modal-card .dx-form-grid input,
+.dx-modal-card .dx-form-grid select,
+.dx-modal-card .dx-form-grid textarea {
+  min-height: 44px !important;
+  font-size: 13px !important;
+}
+
+.dx-modal-card .dx-form-grid textarea {
+  min-height: 92px !important;
+}
+
+.dx-modal-card .dx-evidence-heading strong {
+  font-size: 13px !important;
+}
+
+.dx-modal-card .dx-evidence-heading small {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+/* ----------------------------------------------------------
+   Modales de detalle: jerarquia y lectura
+   ---------------------------------------------------------- */
+
+.dx-route-modal-card {
+  width: min(960px, 96vw) !important;
+}
+
+.dx-route-modal-card .dx-modal-header h2 {
+  font-size: 24px !important;
+}
+
+.dx-route-modal-card .dx-modal-header p {
+  font-size: 13px !important;
+}
+
+.v3-detail-title {
+  gap: 10px !important;
+}
+
+.v3-detail-title > span {
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 10px !important;
+}
+
+.v3-detail-title h3 {
+  font-size: 16px !important;
+}
+
+.dx-detail-grid span {
+  font-size: 10px !important;
+  letter-spacing: 0.35px !important;
+}
+
+.dx-detail-grid strong {
+  margin-top: 5px !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+.dx-detail-list strong {
+  font-size: 13px !important;
+}
+
+.dx-detail-list span {
+  font-size: 12px !important;
+}
+
+.dx-detail-list small {
+  font-size: 11px !important;
+}
+
+.dx-timeline strong {
+  font-size: 12px !important;
+}
+
+.dx-timeline p {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+.dx-timeline small {
+  font-size: 10px !important;
+}
+
+.v3-detail-copy {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+
+.v3-detail-empty {
+  font-size: 12px !important;
+}
+
+/* ----------------------------------------------------------
+   Confirmacion destructiva
+   ---------------------------------------------------------- */
+
+.dx-confirm-trigger {
+  min-height: 35px !important;
+  padding: 0 10px !important;
+  cursor: pointer;
+}
+
+.dx-confirm-card {
+  width: min(520px, 94vw);
+  padding: 22px;
+
+  border-radius: 24px;
+}
+
+.dx-confirm-icon {
+  width: 46px;
+  height: 46px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 15px;
+
+  color: #fecaca;
+  border: 1px solid rgba(248, 113, 113, 0.22);
+  background: rgba(185, 28, 28, 0.15);
+
+  font-size: 21px;
+  font-weight: 900;
+}
+
+.dx-confirm-copy {
+  margin-top: 14px;
+}
+
+.dx-confirm-copy > span {
+  color: #fca5a5;
+
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+.dx-confirm-copy h2 {
+  margin: 5px 0 0;
+
+  color: #fff;
+
+  font-size: 23px;
+  line-height: 1.2;
+}
+
+.dx-confirm-copy p {
+  margin: 8px 0 0;
+
+  color: rgba(243, 237, 255, 0.68);
+
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.dx-confirm-details {
+  margin-top: 16px;
+  padding: 12px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.dx-confirm-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.dx-confirm-facts > div {
+  min-width: 0;
+}
+
+.dx-confirm-facts span,
+.dx-confirm-facts strong {
+  display: block;
+}
+
+.dx-confirm-facts span {
+  color: rgba(239, 233, 255, 0.45);
+
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.dx-confirm-facts strong {
+  margin-top: 4px;
+
+  overflow: hidden;
+
+  color: #fff;
+
+  font-size: 13px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dx-confirm-actions {
+  margin-top: 18px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.dx-confirm-actions form {
+  min-width: 0;
+}
+
+.dx-confirm-cancel,
+.dx-confirm-delete {
+  width: 100%;
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  font-size: 12px;
+  font-weight: 900;
+
+  cursor: pointer;
+}
+
+.dx-confirm-cancel {
+  color: rgba(249, 246, 255, 0.8);
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.dx-confirm-delete {
+  color: #fff;
+
+  border: 1px solid rgba(248, 113, 113, 0.27);
+
+  background: linear-gradient(
+    135deg,
+    rgba(185, 28, 28, 0.72),
+    rgba(127, 29, 29, 0.76)
+  );
+}
+
+/* ----------------------------------------------------------
+   Paginacion exacta + numerada
+   ---------------------------------------------------------- */
+
+.v5-pagination {
+  flex-wrap: wrap !important;
+  gap: 9px !important;
+}
+
+.v5-pagination > strong {
+  min-width: 108px;
+
+  color: rgba(247, 243, 255, 0.75) !important;
+
+  font-size: 11px !important;
+  text-align: center;
+}
+
+.v5-page-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.v5-page-list a,
+.v5-page-ellipsis {
+  min-width: 36px;
+  min-height: 36px;
+
+  padding: 0 9px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  font-size: 11px;
+}
+
+.v5-page-list a {
+  color: rgba(247, 243, 255, 0.72);
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  background: rgba(255, 255, 255, 0.028);
+}
+
+.v5-page-list a.active {
+  color: #fff;
+
+  border-color: rgba(167, 139, 250, 0.34);
+
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.28),
+    rgba(102, 74, 171, 0.22)
+  );
+
+  box-shadow:
+    0 0 0 1px rgba(167, 139, 250, 0.08),
+    0 8px 20px rgba(75, 46, 135, 0.18);
+}
+
+.v5-page-ellipsis {
+  color: rgba(239, 233, 255, 0.4);
+}
+
+/* Mensajes de error siguen visibles; no se estiliza success. */
+
+@media (max-width: 640px) {
+  .v3-page-header > .dx-modal-trigger {
+    width: 100%;
+    min-height: 50px !important;
+  }
+
+  .dx-modal-backdrop,
+  .dx-route-modal {
+    padding: 12px !important;
+  }
+
+  .dx-modal-card,
+  .dx-route-modal-card,
+  .dx-confirm-card {
+    max-height: calc(100vh - 24px) !important;
+  }
+
+  .dx-confirm-facts,
+  .dx-confirm-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dx-modal-card,
+  .dx-route-modal-card,
+  .dx-confirm-card,
+  .v5-page-list a {
+    transition-duration: 0.001ms !important;
+  }
+}
