@@ -55,7 +55,7 @@
     "vite": "^8.3.1",
     "vitest": "^5.0.3"
   },
-  "description": "Aplicacion web para gestionar devoluciones, evidencias, reportes de carga y flujos operativos con control de acceso por roles.",
+  "description": "Returns traceability with private photo evidence, load reports and role-based access, built with Next.js and Supabase.",
   "engines": {
     "node": ">=22.18"
   }
