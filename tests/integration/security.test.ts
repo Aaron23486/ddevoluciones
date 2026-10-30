@@ -8,6 +8,7 @@ import {
   rpc,
   RUN,
   TestEnvironment,
+  testPassword,
   type Account,
 } from "./support";
 
@@ -114,7 +115,7 @@ describe("cuentas", () => {
     });
     const { data, error } = await anon.auth.signUp({
       email: `it-signup-${RUN}@example.test`,
-      password: "Prueba-Segura-2026",
+      password: testPassword(),
     });
     expect(error).not.toBeNull();
     expect(data.user).toBeNull();

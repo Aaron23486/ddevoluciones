@@ -1,0 +1,46 @@
+# Dependabot propone actualizaciones como pull requests; ninguna se aplica sola.
+# Cada pull request pasa por el CI completo y se revisa antes de unirlo.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # Parches y versiones menores juntos; cada versión mayor llega en su propio pull request.
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Versiones mayores que se hacen a propósito, como cambio propio:
+      # - los tipos de Node siguen la versión mayor de Node que usan la app y el CI (22);
+      # - Next.js y eslint-config-next comparten versión y se actualizan juntos;
+      # - React y React DOM se actualizan junto con Next.js;
+      # - las mayores de TypeScript, ESLint, Vitest y su cobertura dependen del resto de herramientas.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-config-next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "vitest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@vitest/coverage-v8"
+        update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: chore(deps)
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci(deps)
