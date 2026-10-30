@@ -14,4 +14,4 @@ Only the latest version on `main` receives security fixes.
 
 The application code, the SQL migrations and the scripts in this repository. The configuration of a particular hosted Supabase project or deployment is the responsibility of whoever runs it.
 
-The controls in place are described in [docs/SECURITY.md](docs/SECURITY.md).
+The controls in place are described in [docs/security.md](docs/security.md).
