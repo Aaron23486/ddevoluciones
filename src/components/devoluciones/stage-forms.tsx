@@ -23,13 +23,18 @@ export function CreateDevolucionForm() {
         placeholder="Cantidad"
       />
 
-      <select name="clasificacion" required defaultValue="bueno">
+      <select
+        name="clasificacion"
+        aria-label="Clasificacion"
+        required
+        defaultValue="bueno"
+      >
         <option value="bueno">Bueno</option>
         <option value="malo">Malo</option>
         <option value="mixto">Mixto</option>
       </select>
 
-      <select name="flujo" required defaultValue="pesado">
+      <select name="flujo" aria-label="Flujo" required defaultValue="pesado">
         <option value="pesado">Pesado</option>
         <option value="almacen">Almacen</option>
       </select>
@@ -72,7 +77,12 @@ export function ReceptionForm({ devolucionId }: { devolucionId: string }) {
         required
         placeholder="Cantidad recibida"
       />
-      <select name="clasificacion" required defaultValue="bueno">
+      <select
+        name="clasificacion"
+        aria-label="Clasificacion"
+        required
+        defaultValue="bueno"
+      >
         <option value="bueno">Bueno</option>
         <option value="malo">Malo</option>
         <option value="mixto">Mixto</option>

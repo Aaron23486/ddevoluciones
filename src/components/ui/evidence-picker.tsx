@@ -101,6 +101,7 @@ export function EvidencePicker({
         className="dx-evidence-source"
         type="file"
         accept="image/jpeg,image/png,image/webp"
+        aria-label={`${label}: subir imagen`}
         onChange={(event) => assignFile(event.target.files?.[0])}
       />
 
@@ -110,6 +111,7 @@ export function EvidencePicker({
         type="file"
         accept="image/jpeg,image/png,image/webp"
         capture="environment"
+        aria-label={`${label}: tomar foto`}
         onChange={(event) => assignFile(event.target.files?.[0])}
       />
 
