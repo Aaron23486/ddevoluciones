@@ -1,23 +1,25 @@
 import { z } from "zod";
 
-const optionalText = z.preprocess((value) => {
-  const text = String(value ?? "").trim();
-  return text.length ? text : undefined;
-}, z.string().max(2000).optional());
+function optionalText(max: number) {
+  return z.preprocess((value) => {
+    const text = String(value ?? "").trim();
+    return text.length ? text : undefined;
+  }, z.string().max(max).optional());
+}
 
 export const createReporteCargaSchema = z.object({
-  numeroDocumento: optionalText,
-  factura: optionalText,
+  numeroDocumento: optionalText(120),
+  factura: optionalText(120),
   cliente: z.string().trim().min(1).max(300),
   articulo: z.string().trim().min(1).max(300),
-  descripcionMaterial: optionalText,
+  descripcionMaterial: optionalText(2000),
   cantidad: z.coerce.number().int().positive(),
-  transportista: optionalText,
-  ruta: optionalText,
-  placa: optionalText,
+  transportista: optionalText(300),
+  ruta: optionalText(120),
+  placa: optionalText(100),
   motivoNoEntrega: z.string().trim().min(1).max(2000),
   estadoFisicoCarga: z.enum(["Buen estado", "Mal estado"]),
-  observacionesRetorno: optionalText,
+  observacionesRetorno: optionalText(2000),
 });
 
 export const redispatchReporteCargaSchema = z.object({
