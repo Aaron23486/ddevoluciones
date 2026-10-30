@@ -46,10 +46,7 @@ select:focus-visible {
   border-radius: 12px !important;
 }
 
-.dx-evidence-card,
-.dx-evidence-item,
-.dx-evidence-picker,
-.dx-upload-zone {
+.dx-evidence-picker {
   border-radius: 14px !important;
 }
 

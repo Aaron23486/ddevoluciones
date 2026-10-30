@@ -1,79 +1,11 @@
 /* ---------- Reusable primitives ---------- */
 
-.dv-ui-panel,
-.dv-app section.rounded-xl,
-.dv-app section.rounded-2xl,
-.dv-app div.rounded-xl.border,
-.dv-app div.rounded-2xl.border {
-  border: 1px solid var(--dv-glass-border) !important;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 38%),
-    var(--dv-glass-bg-soft) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.035),
-    0 16px 38px rgba(0, 0, 0, 0.14);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.dv-ui-panel {
-  border-radius: var(--dv-radius-xl);
-  padding: 20px;
-}
-
-.dv-ui-hero {
-  padding: 28px;
-  border-radius: var(--dv-radius-xl);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 20px;
-  border: 1px solid var(--dv-glass-border);
-  background: var(--dv-glass-bg);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
-  box-shadow: var(--dv-shadow-main);
-}
-
-.dv-ui-kicker {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--dv-text-accent);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-}
-
-.dv-ui-hero h1 {
-  margin: 0 0 8px;
-  color: #f7f4ff;
-  font-size: clamp(32px, 5vw, 58px);
-  line-height: 1;
-}
-
-.dv-ui-hero p {
-  margin: 0;
-  color: rgba(234, 228, 255, 0.66);
-}
-
-.dv-ui-hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 /* ---------- Buttons ---------- */
 
-.dv-ui-button,
 .dv-app
   button:not(.dv-sidebar-logout):not(.dv-mini-button):not(
     .dv-notification-bell
-  ),
-.dv-app a.rounded.border,
-.dv-app a.rounded-lg.border,
-.dv-app a.rounded-md.border {
+  ) {
   min-height: 42px;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   border-radius: var(--dv-radius-sm) !important;
@@ -89,45 +21,16 @@
     box-shadow 0.18s ease;
 }
 
-.dv-ui-button:hover,
 .dv-app
   button:not(.dv-sidebar-logout):not(.dv-mini-button):not(
     .dv-notification-bell
-  ):hover,
-.dv-app a.rounded.border:hover,
-.dv-app a.rounded-lg.border:hover,
-.dv-app a.rounded-md.border:hover {
+  ):hover {
   transform: translateY(-1px);
   border-color: rgba(205, 190, 255, 0.28) !important;
   background: rgba(118, 91, 196, 0.18) !important;
 }
 
-.dv-ui-button-primary,
-.dv-app button.bg-black,
-.dv-app button.bg-slate-950,
-.dv-app button.bg-blue-600 {
-  color: #fff !important;
-  background: linear-gradient(
-    135deg,
-    rgba(118, 91, 196, 0.58),
-    rgba(78, 49, 145, 0.46)
-  ) !important;
-  border-color: rgba(205, 190, 255, 0.24) !important;
-  box-shadow: 0 14px 30px rgba(39, 19, 82, 0.28);
-}
-
-.dv-ui-button-danger,
-.dv-app button.bg-red-600,
-.dv-app button.bg-red-700,
-.dv-app button.text-red-700,
-.dv-app button.text-red-800 {
-  color: #fecaca !important;
-  background: rgba(185, 28, 28, 0.28) !important;
-  border-color: rgba(248, 113, 113, 0.3) !important;
-}
-
-.dv-app button:disabled,
-.dv-ui-button:disabled {
+.dv-app button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
   transform: none !important;
@@ -135,7 +38,6 @@
 
 /* ---------- Inputs ---------- */
 
-.dv-ui-input,
 .dv-app input:not([type="checkbox"]):not([type="radio"]),
 .dv-app select,
 .dv-app textarea {
@@ -153,13 +55,11 @@
     background 0.18s ease;
 }
 
-.dv-app textarea,
-.dv-ui-textarea {
+.dv-app textarea {
   min-height: 92px;
   resize: vertical;
 }
 
-.dv-ui-input:focus,
 .dv-app input:not([type="checkbox"]):not([type="radio"]):focus,
 .dv-app select:focus,
 .dv-app textarea:focus {
@@ -210,8 +110,7 @@
   color: var(--dv-text-soft);
 }
 
-.dv-app label > span:first-child,
-.dv-app label.block.text-sm.font-medium {
+.dv-app label > span:first-child {
   font-weight: 800;
 }
 
@@ -228,9 +127,7 @@
   background: rgba(255, 255, 255, 0.025);
 }
 
-.dv-app thead,
-.dv-app thead.bg-slate-50,
-.dv-app thead.bg-white {
+.dv-app thead {
   background: linear-gradient(
     135deg,
     rgba(118, 91, 196, 0.22),
@@ -270,451 +167,6 @@
 
 /* ---------- Badges ---------- */
 
-.dv-ui-badge,
-.dv-app .rounded-full {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 28px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  font-size: 11px;
-  font-weight: 900;
-}
-
-.dv-ui-badge-neutral {
-  color: var(--dv-text-soft);
-  background: rgba(255, 255, 255, 0.055);
-}
-
-.dv-ui-badge-warning {
-  color: #fcd34d;
-  background: rgba(245, 158, 11, 0.16);
-  border-color: rgba(245, 158, 11, 0.28);
-}
-
-.dv-ui-badge-info {
-  color: #7dd3fc;
-  background: rgba(56, 189, 248, 0.14);
-  border-color: rgba(56, 189, 248, 0.24);
-}
-
-.dv-ui-badge-success {
-  color: #86efac;
-  background: rgba(34, 197, 94, 0.15);
-  border-color: rgba(34, 197, 94, 0.26);
-}
-
-.dv-ui-badge-danger {
-  color: #fecaca;
-  background: rgba(185, 28, 28, 0.24);
-  border-color: rgba(248, 113, 113, 0.32);
-}
-
-.dv-ui-badge-purple {
-  color: #d8b4fe;
-  background: rgba(168, 85, 247, 0.16);
-  border-color: rgba(168, 85, 247, 0.28);
-}
-
 /* ---------- Common page typography ---------- */
 
-.dv-page-shell > main > section:first-child h1,
-.dv-page-shell > main > section:first-child h2,
-.dv-page-shell > main > h1 {
-  letter-spacing: -0.02em;
-}
-
-.dv-app .text-xs.uppercase,
-.dv-app .uppercase.tracking-wide {
-  color: var(--dv-text-accent) !important;
-  font-weight: 800;
-  letter-spacing: 0.08em !important;
-}
-
 /* ---------- Login: original visual language ---------- */
-
-.dv-login-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  color: #fff;
-  background:
-    radial-gradient(
-      circle at 18% 22%,
-      rgba(130, 70, 180, 0.36),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at 82% 78%,
-      rgba(90, 120, 255, 0.34),
-      transparent 34%
-    ),
-    linear-gradient(135deg, #120719 0%, #2a1038 44%, #111827 100%);
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.dv-login-page::before {
-  content: "";
-  position: fixed;
-  inset: -20%;
-  background:
-    radial-gradient(
-      circle at 50% 30%,
-      rgba(255, 255, 255, 0.07),
-      transparent 28%
-    ),
-    radial-gradient(
-      circle at 30% 80%,
-      rgba(255, 100, 150, 0.12),
-      transparent 26%
-    );
-  filter: blur(18px);
-  pointer-events: none;
-}
-
-.dv-login-shell {
-  position: relative;
-  z-index: 1;
-  width: min(1050px, 100%);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(380px, 430px);
-  gap: 42px;
-  align-items: center;
-}
-
-.dv-login-brand {
-  max-width: 500px;
-}
-
-.dv-login-kicker {
-  display: inline-flex;
-  margin-bottom: 14px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  color: #ded4ff;
-  background: rgba(255, 255, 255, 0.075);
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  font-size: 12px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.dv-login-brand h1 {
-  margin: 0 0 14px;
-  font-size: clamp(36px, 5vw, 64px);
-  line-height: 0.95;
-  color: #fff;
-}
-
-.dv-login-brand > p {
-  margin: 0;
-  max-width: 440px;
-  color: rgba(246, 242, 255, 0.72);
-  font-size: 16px;
-  line-height: 1.65;
-}
-
-.dv-login-brand-mark {
-  width: fit-content;
-  margin-top: 28px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.045);
-  backdrop-filter: blur(18px);
-}
-
-.dv-login-brand-mark > span {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 15px;
-  color: #fff;
-  background: linear-gradient(
-    135deg,
-    rgba(118, 91, 196, 0.7),
-    rgba(71, 43, 130, 0.5)
-  );
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.dv-login-brand-mark strong,
-.dv-login-brand-mark small {
-  display: block;
-}
-
-.dv-login-brand-mark small {
-  margin-top: 2px;
-  color: rgba(234, 228, 255, 0.56);
-  font-size: 11px;
-}
-
-.dv-login-side {
-  width: min(430px, 100%);
-}
-
-.dv-auth-card {
-  width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
-  border-radius: 28px;
-  padding: 22px;
-  color: #fff;
-}
-
-.dv-auth-header {
-  margin-bottom: 18px;
-}
-
-.dv-auth-header > span {
-  display: inline-flex;
-  margin-bottom: 8px;
-  color: #cfc2ff;
-  font-size: 11px;
-  letter-spacing: 1.1px;
-  text-transform: uppercase;
-  font-weight: 900;
-}
-
-.dv-auth-header h2 {
-  margin: 0 0 8px;
-  color: #fff;
-  font-size: 28px;
-}
-
-.dv-auth-header p {
-  margin: 0;
-  color: rgba(246, 242, 255, 0.7);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.dv-auth-error {
-  margin-bottom: 15px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  color: #fecaca;
-  background: rgba(185, 28, 28, 0.2);
-  border: 1px solid rgba(248, 113, 113, 0.26);
-  font-size: 13px;
-}
-
-.dv-auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.dv-auth-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.dv-auth-field > span {
-  color: rgba(234, 228, 255, 0.56);
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-}
-
-.dv-auth-field input {
-  width: 100%;
-  min-height: 46px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.07);
-  color: #fff;
-  outline: none;
-  font-size: 14px;
-}
-
-.dv-auth-field input::placeholder {
-  color: rgba(246, 242, 255, 0.42);
-}
-
-.dv-auth-field input:focus {
-  border-color: rgba(196, 181, 253, 0.48);
-  box-shadow: 0 0 0 3px rgba(118, 91, 196, 0.16);
-}
-
-.dv-auth-submit {
-  width: 100%;
-  min-height: 52px;
-  margin-top: 4px;
-  border: 1px solid rgba(205, 190, 255, 0.18);
-  border-radius: 16px;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 900;
-  letter-spacing: 0.8px;
-  background: linear-gradient(
-    90deg,
-    rgba(109, 18, 59, 0.82),
-    rgba(109, 66, 215, 0.9)
-  );
-  box-shadow: 0 18px 36px rgba(71, 38, 150, 0.3);
-  transition:
-    transform 0.18s ease,
-    opacity 0.18s ease;
-}
-
-.dv-auth-submit:hover {
-  transform: translateY(-2px);
-}
-
-.dv-demo-accounts {
-  margin-top: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.045);
-  overflow: hidden;
-}
-
-.dv-demo-accounts > summary {
-  min-height: 52px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  cursor: pointer;
-  list-style: none;
-}
-
-.dv-demo-accounts > summary::-webkit-details-marker {
-  display: none;
-}
-
-.dv-demo-accounts > summary span {
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.dv-demo-accounts > summary small {
-  color: rgba(234, 228, 255, 0.56);
-  font-size: 11px;
-}
-
-.dv-demo-accounts[open] > summary {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.dv-demo-accounts-list {
-  padding: 12px;
-  display: grid;
-  gap: 7px;
-}
-
-.dv-demo-account {
-  min-height: 38px;
-  padding: 8px 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.035);
-}
-
-.dv-demo-account span {
-  color: rgba(246, 242, 255, 0.82);
-  font-size: 10px;
-  font-weight: 900;
-}
-
-.dv-demo-account code {
-  overflow: hidden;
-  color: rgba(234, 228, 255, 0.58);
-  font-size: 10px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.dv-demo-accounts > p {
-  margin: 0;
-  padding: 0 12px 12px;
-  color: rgba(234, 228, 255, 0.5);
-  font-size: 10px;
-  line-height: 1.45;
-}
-
-@media (max-width: 900px) {
-  .dv-login-shell {
-    grid-template-columns: 1fr;
-    gap: 26px;
-  }
-
-  .dv-login-brand {
-    text-align: center;
-    margin: 0 auto;
-  }
-
-  .dv-login-brand > p {
-    margin: 0 auto;
-  }
-
-  .dv-login-brand-mark {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .dv-login-side {
-    margin: 0 auto;
-  }
-
-  .dv-ui-hero {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 520px) {
-  .dv-login-page {
-    align-items: flex-start;
-    padding: 18px;
-  }
-
-  .dv-login-shell {
-    gap: 22px;
-  }
-
-  .dv-login-brand h1 {
-    font-size: 38px;
-  }
-
-  .dv-login-brand > p {
-    font-size: 14px;
-    line-height: 1.55;
-  }
-
-  .dv-demo-account {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .dv-ui-hero-actions {
-    width: 100%;
-  }
-
-  .dv-ui-hero-actions > * {
-    width: 100%;
-  }
-}
