@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Mínimo privilegio: el workflow solo lee el repositorio.
+permissions:
+  contents: read
+
+jobs:
+  # Formato, lint, tipos, pruebas unitarias con umbral de cobertura y build de producción.
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:coverage
+      # El build solo necesita que existan los valores públicos; no se conecta a Supabase.
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:55421
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-placeholder
+
+  # Vulnerabilidades conocidas en dependencias y secretos en todo el historial.
+  supply-chain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # historial completo, para la búsqueda de secretos
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      # Falla con vulnerabilidades altas o críticas, de producción o de desarrollo.
+      - run: npm audit --audit-level=high
+      - name: Secret scan (gitleaks, full history)
+        run: >-
+          docker run --rm -v "$PWD:/repo"
+          ghcr.io/gitleaks/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c9f602fb195b7fadc1e812065883f695d1eeaba854
+          git /repo --redact --no-banner
+
+  # Migraciones sobre una base vacía, demo:setup y pruebas de integración contra el Supabase local.
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # Studio, su servicio de metadatos y el runtime de Edge no se usan aquí. El registro de
+      # imágenes a veces rechaza descargas por un rato, así que el arranque se reintenta.
+      - name: Start the local Supabase
+        run: |
+          for attempt in 1 2 3; do
+            npx supabase start -x studio,postgres-meta,edge-runtime && exit 0
+            echo "Attempt $attempt to start Supabase failed; retrying in 30 seconds."
+            npx supabase stop --no-backup || true
+            sleep 30
+          done
+          exit 1
+      - run: npm run demo:setup
+      - run: npm run test:integration
