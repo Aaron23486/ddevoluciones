@@ -520,40 +520,6 @@
 
 /* Report load KPI strip */
 
-.v3-kpi-strip {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  overflow: hidden;
-  border-radius: 20px;
-}
-
-.v3-kpi-strip > div {
-  min-height: 74px;
-  padding: 12px 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.v3-kpi-strip > div:last-child {
-  border-right: 0;
-}
-
-.v3-kpi-strip span {
-  color: rgba(238, 231, 255, 0.48);
-  font-size: 9px;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.v3-kpi-strip strong {
-  margin-top: 4px;
-  color: #fff;
-  font-size: 26px;
-  letter-spacing: -0.035em;
-}
-
 /* Detail modal */
 
 .v3-detail-layout {
@@ -650,10 +616,6 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .v3-kpi-strip {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .v3-kpi-strip > div:nth-child(2) {
     border-right: 0;
   }
@@ -695,10 +657,6 @@
 
   .v3-state {
     max-width: 108px;
-  }
-
-  .v3-kpi-strip {
-    grid-template-columns: 1fr 1fr;
   }
 }
 
