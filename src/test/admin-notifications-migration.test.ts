@@ -10,8 +10,8 @@ const sql = readFileSync(
   "utf8",
 );
 
-describe("admin operational notification migration contract", () => {
-  it("keeps original operational audience and creates one admin copy", () => {
+describe("migración de notificaciones para admin (contrato)", () => {
+  it("conserva la audiencia original y crea una copia para admin", () => {
     expect(sql).toContain("new.target_role not in ('pesado', 'inventario')");
     expect(sql).toContain("'devolucion_creada'");
     expect(sql).toContain("'admin'");
@@ -19,7 +19,7 @@ describe("admin operational notification migration contract", () => {
     expect(sql).toContain("create unique index if not exists");
   });
 
-  it("does not weaken access policies or overwrite the operational RPC", () => {
+  it("no debilita las políticas ni reemplaza la RPC operativa", () => {
     expect(sql).not.toMatch(
       /create\s+policy|alter\s+policy|grant\s+select\s+on\s+public\.internal_notifications/i,
     );
@@ -29,7 +29,7 @@ describe("admin operational notification migration contract", () => {
     expect(sql).not.toMatch(/drop\s+table|truncate\s+table/i);
   });
 
-  it("does not copy report alerts or existing close alerts", () => {
+  it("no copia alertas de reportes ni de cierres existentes", () => {
     expect(sql).not.toContain("reporte_carga_enviado");
     expect(sql).not.toContain("reporte_carga_pendiente_envio");
     expect(sql).not.toContain("devolucion_cerrada");

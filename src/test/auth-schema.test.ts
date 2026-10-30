@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { signInSchema } from "@/schemas/auth";
 
-describe("demo login schema", () => {
-  it("accepts Gmail addresses", () => {
+describe("esquema del login", () => {
+  it("acepta direcciones de Gmail", () => {
     const result = signInSchema.safeParse({
       email: "pruebasadmin@gmail.com",
       password: "demo-password",
@@ -10,7 +10,7 @@ describe("demo login schema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("accepts reserved example.com demo addresses", () => {
+  it("acepta las direcciones de demostración de example.com", () => {
     const result = signInSchema.safeParse({
       email: "admin.demo@example.com",
       password: "demo-password",
@@ -18,7 +18,7 @@ describe("demo login schema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("rejects malformed email", () => {
+  it("rechaza correos mal formados", () => {
     const result = signInSchema.safeParse({
       email: "not-an-email",
       password: "demo-password",
@@ -26,7 +26,7 @@ describe("demo login schema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("requires a password", () => {
+  it("exige contraseña", () => {
     const result = signInSchema.safeParse({
       email: "admin.demo@example.com",
       password: "",
