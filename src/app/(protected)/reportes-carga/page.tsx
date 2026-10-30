@@ -1,21 +1,12 @@
-import Link from "next/link";
-import { EvidencePicker } from "@/components/ui/evidence-picker";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { ListPagination } from "@/components/app/list-pagination";
+import { CreateReporteCargaForm } from "@/components/reportes-carga/load-forms";
+import { ReporteCargaCard } from "@/components/reportes-carga/reporte-carga-card";
+import { ReporteCargaDetail } from "@/components/reportes-carga/reporte-carga-detail";
+import { ReporteCargaFilters } from "@/components/reportes-carga/reporte-carga-filters";
 import { ModalShell } from "@/components/ui/modal-shell";
-import {
-  annulReporteCargaAction,
-  createReporteCargaAction,
-  redispatchReporteCargaAction,
-} from "@/features/reportes-carga/actions";
 import { ROUTE_ROLES } from "@/constants/permissions";
 import { requireRole } from "@/lib/auth/require-user";
-import {
-  buildListHref,
-  formatDate,
-  one,
-  paginationItems,
-  validUuid,
-} from "@/lib/list-page";
+import { buildListHref, one, validUuid } from "@/lib/list-page";
 import {
   getReportesCargaDetails,
   getReportesCargaMetrics,
@@ -31,12 +22,6 @@ const preserve = (
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
-const LOAD_STATE_LABELS: Record<string, string> = {
-  recibido_muelle: "Recibido en muelle",
-  pendiente_redespacho: "Pendiente de envio",
-  redespachado: "Enviado",
 };
 
 export default async function ReportesCargaPage({ searchParams }: Props) {
@@ -66,8 +51,6 @@ export default async function ReportesCargaPage({ searchParams }: Props) {
     ? await getReportesCargaDetails([selected.id])
     : { history: [], evidence: [] };
 
-  const activeFilters = Object.values(filters).filter(Boolean).length;
-  const closeDetailHref = preserve(filters, page);
   const totalPages = Math.max(
     1,
     Math.ceil(metrics.total / REPORTE_CARGA_PAGE_SIZE),
@@ -90,57 +73,7 @@ export default async function ReportesCargaPage({ searchParams }: Props) {
           contextTone="carga"
           tone="primary"
         >
-          <form action={createReporteCargaAction} className="dx-form-grid">
-            <input name="numeroDocumento" placeholder="Numero documento" />
-            <input name="factura" placeholder="Factura" />
-            <input name="cliente" required placeholder="Cliente *" />
-            <input name="articulo" required placeholder="Articulo *" />
-            <input
-              name="cantidad"
-              required
-              type="number"
-              min="1"
-              step="1"
-              placeholder="Cantidad *"
-            />
-
-            <select name="estadoFisicoCarga" required defaultValue="">
-              <option value="" disabled>
-                Estado fisico *
-              </option>
-              <option value="Buen estado">Buen estado</option>
-              <option value="Mal estado">Mal estado</option>
-            </select>
-
-            <input name="transportista" placeholder="Transportista" />
-            <input name="ruta" placeholder="Ruta" />
-            <input name="placa" placeholder="Placa" />
-
-            <textarea
-              name="descripcionMaterial"
-              placeholder="Descripcion material"
-              className="dx-col-span-all"
-            />
-            <textarea
-              name="motivoNoEntrega"
-              required
-              placeholder="Motivo de no entrega *"
-            />
-            <textarea
-              name="observacionesRetorno"
-              placeholder="Observaciones retorno"
-            />
-
-            <EvidencePicker
-              name="evidenciaRecepcion"
-              label="Evidencia de recepcion"
-              required
-            />
-
-            <button className="dx-submit dx-col-span-all">
-              Registrar retorno
-            </button>
-          </form>
+          <CreateReporteCargaForm />
         </ModalShell>
       </section>
 
@@ -174,59 +107,11 @@ export default async function ReportesCargaPage({ searchParams }: Props) {
       </section>
 
       <section className="v3-browser-layout">
-        <aside className="v3-filter-column">
-          <div className="v3-filter-sticky dv-glass">
-            <div className="v3-filter-heading">
-              <div>
-                <span className="v3-eyebrow">Consulta</span>
-                <h2>Filtros</h2>
-              </div>
-              <span>{activeFilters} activos</span>
-            </div>
-
-            <form method="get" className="v3-filter-form">
-              <label>
-                <span>Buscar</span>
-                <input
-                  name="search"
-                  defaultValue={filters.search}
-                  placeholder="Cliente, articulo, ruta o factura"
-                />
-              </label>
-
-              <label>
-                <span>Estado</span>
-                <select name="estado" defaultValue={filters.estado}>
-                  <option value="">Todos</option>
-                  <option value="pendiente_redespacho">
-                    Pendiente de envio
-                  </option>
-                  <option value="redespachado">Enviado</option>
-                </select>
-              </label>
-
-              <label>
-                <span>Desde</span>
-                <input name="desde" type="date" defaultValue={filters.desde} />
-              </label>
-
-              <label>
-                <span>Hasta</span>
-                <input name="hasta" type="date" defaultValue={filters.hasta} />
-              </label>
-
-              <button className="v3-filter-apply">Aplicar filtros</button>
-              <Link href="/reportes-carga" className="v3-filter-clear">
-                Limpiar filtros
-              </Link>
-            </form>
-
-            <div className="v3-filter-foot">
-              <span>{REPORTE_CARGA_PAGE_SIZE} registros max.</span>
-              <span>Pagina {result.page}</span>
-            </div>
-          </div>
-        </aside>
+        <ReporteCargaFilters
+          filters={filters}
+          pageSize={REPORTE_CARGA_PAGE_SIZE}
+          page={result.page}
+        />
 
         <section className="v3-results-panel dv-glass">
           <div className="v3-results-heading">
@@ -247,326 +132,32 @@ export default async function ReportesCargaPage({ searchParams }: Props) {
             </div>
           ) : (
             <div className="v3-card-grid">
-              {result.rows.map((row) => {
-                const detailHref = preserve(filters, page, {
-                  detail: row.id,
-                });
-
-                return (
-                  <article key={row.id} className="v3-case-card load">
-                    <header className="v3-card-head">
-                      <div>
-                        <span>
-                          {row.numero_documento
-                            ? `Documento ${row.numero_documento}`
-                            : `Factura ${row.factura ?? "-"}`}
-                        </span>
-                        <h3>{row.cliente}</h3>
-                      </div>
-
-                      <span className={`v3-state state-${row.estado}`}>
-                        {LOAD_STATE_LABELS[row.estado] ?? row.estado}
-                      </span>
-                    </header>
-
-                    <div className="v3-card-core">
-                      <div>
-                        <span>Articulo</span>
-                        <strong>{row.articulo || "-"}</strong>
-                      </div>
-                      <div>
-                        <span>Cantidad</span>
-                        <strong>{row.cantidad}</strong>
-                      </div>
-                      <div>
-                        <span>Ruta</span>
-                        <strong>{row.ruta || "-"}</strong>
-                      </div>
-                    </div>
-
-                    <div className="v3-card-logistics">
-                      <div>
-                        <span>Transportista</span>
-                        <strong>{row.transportista || "-"}</strong>
-                      </div>
-                      <div>
-                        <span>Placa</span>
-                        <strong>{row.placa || "-"}</strong>
-                      </div>
-                    </div>
-
-                    <p className="v3-card-reason">
-                      {row.motivo_no_entrega || "Sin motivo registrado."}
-                    </p>
-
-                    <div className="v3-card-date">
-                      {formatDate(row.recibido_at ?? row.created_at)}
-                    </div>
-
-                    <footer className="v3-card-actions">
-                      <Link
-                        href={detailHref}
-                        className="v3-card-primary-action"
-                      >
-                        Ver detalle
-                      </Link>
-
-                      <div className="v3-card-secondary-actions">
-                        {row.estado === "pendiente_redespacho" &&
-                        (profile.role === "admin" ||
-                          profile.role === "inventario") ? (
-                          <ModalShell
-                            triggerLabel="Registrar envio"
-                            title={`Envio - ${row.cliente}`}
-                            description="Registra conductor, placa, observaciones y evidencia."
-                            tone="primary"
-                          >
-                            <form
-                              action={redispatchReporteCargaAction}
-                              className="dx-form-grid"
-                            >
-                              <input
-                                type="hidden"
-                                name="reporteCargaId"
-                                value={row.id}
-                              />
-                              <input
-                                required
-                                name="conductor"
-                                placeholder="Conductor *"
-                              />
-                              <input
-                                required
-                                name="placaSalida"
-                                placeholder="Placa salida *"
-                              />
-                              <textarea
-                                required
-                                name="observaciones"
-                                placeholder="Observaciones *"
-                              />
-
-                              <EvidencePicker
-                                name="evidenciaRedespacho"
-                                label="Evidencia de salida"
-                                required
-                              />
-
-                              <button className="dx-submit dx-col-span-all">
-                                Registrar envio
-                              </button>
-                            </form>
-                          </ModalShell>
-                        ) : null}
-
-                        {profile.role === "admin" ? (
-                          <ConfirmDialog
-                            triggerLabel="Anular"
-                            title="Anular reporte de carga"
-                            description="Esta accion no se puede deshacer. Confirma que deseas anular este reporte."
-                            details={
-                              <div className="dx-confirm-facts">
-                                <div>
-                                  <span>Documento</span>
-                                  <strong>
-                                    {row.numero_documento || row.factura || "-"}
-                                  </strong>
-                                </div>
-                                <div>
-                                  <span>Cliente</span>
-                                  <strong>{row.cliente}</strong>
-                                </div>
-                              </div>
-                            }
-                          >
-                            <form action={annulReporteCargaAction}>
-                              <input
-                                type="hidden"
-                                name="reporteCargaId"
-                                value={row.id}
-                              />
-                              <button
-                                className="dx-confirm-delete"
-                                type="submit"
-                              >
-                                Anular reporte
-                              </button>
-                            </form>
-                          </ConfirmDialog>
-                        ) : null}
-                      </div>
-                    </footer>
-                  </article>
-                );
-              })}
+              {result.rows.map((row) => (
+                <ReporteCargaCard
+                  key={row.id}
+                  row={row}
+                  role={profile.role}
+                  detailHref={preserve(filters, page, { detail: row.id })}
+                />
+              ))}
             </div>
           )}
 
-          <nav
-            className="v3-pagination v5-pagination"
-            aria-label="Paginacion de reportes de carga"
-          >
-            {result.page > 1 ? (
-              <Link href={preserve(filters, result.page - 1)}>Anterior</Link>
-            ) : (
-              <span className="disabled">Anterior</span>
-            )}
-
-            <div className="v5-page-list">
-              {paginationItems(result.page, totalPages).map((item, index) =>
-                item === "ellipsis" ? (
-                  <span
-                    key={`ellipsis-${index}`}
-                    className="v5-page-ellipsis"
-                    aria-hidden="true"
-                  >
-                    ...
-                  </span>
-                ) : (
-                  <Link
-                    key={item}
-                    href={preserve(filters, item)}
-                    className={item === result.page ? "active" : ""}
-                    aria-current={item === result.page ? "page" : undefined}
-                  >
-                    {item}
-                  </Link>
-                ),
-              )}
-            </div>
-
-            <strong>
-              Pagina {result.page} de {totalPages}
-            </strong>
-
-            {result.page < totalPages ? (
-              <Link href={preserve(filters, result.page + 1)}>Siguiente</Link>
-            ) : (
-              <span className="disabled">Siguiente</span>
-            )}
-          </nav>
+          <ListPagination
+            page={result.page}
+            totalPages={totalPages}
+            label="Paginacion de reportes de carga"
+            hrefFor={(target) => preserve(filters, target)}
+          />
         </section>
       </section>
 
       {selected ? (
-        <div className="dx-route-modal">
-          <section className="dx-route-modal-card dv-glass">
-            <header className="dx-modal-header">
-              <div>
-                <span>Detalle de carga</span>
-                <h2>{selected.cliente}</h2>
-                <p>{LOAD_STATE_LABELS[selected.estado] ?? selected.estado}</p>
-              </div>
-              <Link href={closeDetailHref} className="dx-modal-close">
-                x
-              </Link>
-            </header>
-
-            <div className="v3-detail-layout">
-              <section className="v3-detail-section">
-                <div className="v3-detail-title">
-                  <span>01</span>
-                  <h3>Informacion general</h3>
-                </div>
-
-                <div className="dx-detail-grid">
-                  <div>
-                    <span>Documento</span>
-                    <strong>{selected.numero_documento || "-"}</strong>
-                  </div>
-                  <div>
-                    <span>Factura</span>
-                    <strong>{selected.factura || "-"}</strong>
-                  </div>
-                  <div>
-                    <span>Cliente</span>
-                    <strong>{selected.cliente}</strong>
-                  </div>
-                  <div>
-                    <span>Articulo</span>
-                    <strong>{selected.articulo || "-"}</strong>
-                  </div>
-                  <div>
-                    <span>Cantidad</span>
-                    <strong>{selected.cantidad}</strong>
-                  </div>
-                  <div>
-                    <span>Estado fisico</span>
-                    <strong>{selected.estado_fisico_carga || "-"}</strong>
-                  </div>
-                  <div>
-                    <span>Ruta</span>
-                    <strong>{selected.ruta || "-"}</strong>
-                  </div>
-                  <div>
-                    <span>Transportista</span>
-                    <strong>{selected.transportista || "-"}</strong>
-                  </div>
-                  <div>
-                    <span>Placa</span>
-                    <strong>{selected.placa || "-"}</strong>
-                  </div>
-                </div>
-              </section>
-
-              <section className="v3-detail-section">
-                <div className="v3-detail-title">
-                  <span>02</span>
-                  <h3>Motivo del retorno</h3>
-                </div>
-                <p className="v3-detail-copy">
-                  {selected.motivo_no_entrega || "Sin motivo registrado."}
-                </p>
-              </section>
-
-              <section className="v3-detail-section">
-                <div className="v3-detail-title">
-                  <span>03</span>
-                  <h3>Evidencias</h3>
-                </div>
-                <div className="dx-detail-list">
-                  {detail.evidence.length > 0 ? (
-                    detail.evidence.map((item) => (
-                      <article key={item.id}>
-                        <div>
-                          <strong>{item.tipo}</strong>
-                          <span>{item.descripcion || "Sin descripcion"}</span>
-                        </div>
-                        <small>{formatDate(item.created_at)}</small>
-                      </article>
-                    ))
-                  ) : (
-                    <div className="v3-detail-empty">
-                      Sin evidencias registradas.
-                    </div>
-                  )}
-                </div>
-              </section>
-
-              <section className="v3-detail-section">
-                <div className="v3-detail-title">
-                  <span>04</span>
-                  <h3>Trazabilidad</h3>
-                </div>
-                <div className="dx-timeline">
-                  {detail.history.map((item) => (
-                    <article key={item.id}>
-                      <i />
-                      <div>
-                        <strong>{item.accion}</strong>
-                        <p>
-                          {item.estado_anterior || "Inicio"} {" -> "}
-                          {item.estado_nuevo || "Sin cambio"}
-                        </p>
-                        <small>{formatDate(item.created_at)}</small>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            </div>
-          </section>
-        </div>
+        <ReporteCargaDetail
+          selected={selected}
+          detail={detail}
+          closeHref={preserve(filters, page)}
+        />
       ) : null}
     </main>
   );
