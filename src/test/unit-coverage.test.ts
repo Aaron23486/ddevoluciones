@@ -18,14 +18,24 @@ import {
 } from "@/schemas/devoluciones";
 import {
   assertEvidenceFile,
+  hasImageSignature,
   removeEvidencePaths,
   uploadEvidence,
 } from "@/services/evidence-storage";
 
 const UUID = "4b7d8f0e-2a1c-4e5b-9f6a-1c2d3e4f5a6b";
 
+const SIGNATURES: Record<string, number[]> = {
+  "image/jpeg": [0xff, 0xd8, 0xff, 0xe0],
+  "image/png": [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a],
+  "image/webp": [0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50],
+};
+
+// Archivo de prueba con la firma de su tipo (o vacío de contenido si size es 0).
 function file(type: string, size: number): File {
-  return new File([new Uint8Array(size)], "evidencia", { type });
+  const bytes = new Uint8Array(size);
+  bytes.set((SIGNATURES[type] ?? []).slice(0, size));
+  return new File([bytes], "evidencia", { type });
 }
 
 describe("roles y rutas", () => {
@@ -144,6 +154,31 @@ describe("esquemas de devoluciones", () => {
 });
 
 describe("evidencias", () => {
+  it("comprueba que el contenido corresponda al tipo declarado", () => {
+    const bytes = (type: string) => new Uint8Array(SIGNATURES[type]);
+    expect(hasImageSignature(bytes("image/jpeg"), "image/jpeg")).toBe(true);
+    expect(hasImageSignature(bytes("image/png"), "image/png")).toBe(true);
+    expect(hasImageSignature(bytes("image/webp"), "image/webp")).toBe(true);
+    expect(hasImageSignature(bytes("image/png"), "image/jpeg")).toBe(false);
+    expect(hasImageSignature(new Uint8Array(12), "image/webp")).toBe(false);
+    expect(hasImageSignature(bytes("image/png"), "image/gif")).toBe(false);
+  });
+
+  it("rechaza subir un archivo cuyo contenido no es una imagen", async () => {
+    const upload = vi.fn();
+    const client = {
+      storage: { from: vi.fn(() => ({ upload })) },
+    } as unknown as SupabaseClient;
+    const disguised = new File([new TextEncoder().encode("<svg></svg>")], "x", {
+      type: "image/png",
+    });
+
+    await expect(
+      uploadEvidence(client, "u", "g", "s", disguised),
+    ).rejects.toThrow("no corresponde a una imagen");
+    expect(upload).not.toHaveBeenCalled();
+  });
+
   it("acepta JPEG, PNG y WebP de hasta 5 MB", () => {
     expect(assertEvidenceFile(file("image/png", 10), "Factura")).toBeInstanceOf(
       File,
@@ -176,7 +211,7 @@ describe("evidencias", () => {
       "user-1",
       "grupo",
       "factura",
-      file("image/webp", 10),
+      file("image/webp", 16),
     );
     expect(path).toMatch(/^user-1\/grupo\/factura-[0-9a-f-]{36}\.webp$/);
     expect(upload).toHaveBeenCalledWith(path, expect.any(File), {
@@ -193,7 +228,7 @@ describe("evidencias", () => {
     } as unknown as SupabaseClient;
 
     await expect(
-      uploadEvidence(client, "u", "g", "s", file("image/png", 1)),
+      uploadEvidence(client, "u", "g", "s", file("image/png", 16)),
     ).rejects.toThrow("No se pudo subir evidencia: lleno");
 
     await removeEvidencePaths(client, []);
