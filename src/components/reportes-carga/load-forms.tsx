@@ -22,7 +22,12 @@ export function CreateReporteCargaForm() {
         placeholder="Cantidad *"
       />
 
-      <select name="estadoFisicoCarga" required defaultValue="">
+      <select
+        name="estadoFisicoCarga"
+        aria-label="Estado fisico"
+        required
+        defaultValue=""
+      >
         <option value="" disabled>
           Estado fisico *
         </option>
