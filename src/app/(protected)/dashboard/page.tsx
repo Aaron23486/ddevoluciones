@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { OperationalDashboard } from "@/components/dashboard/operational-dashboard";
 import { canAccessRoute, getDefaultRoute } from "@/constants/permissions";
 import { requireActiveProfile } from "@/lib/auth/require-user";
+import { one } from "@/lib/list-page";
 import { getExecutiveDashboardData } from "@/repositories/dashboard-analytics";
 import {
   listDispositionQueue,
@@ -14,10 +15,6 @@ import {
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function one(value: string | string[] | undefined): string {
-  return typeof value === "string" ? value : "";
-}
 
 export default async function DashboardPage({ searchParams }: Props) {
   const profile = await requireActiveProfile();

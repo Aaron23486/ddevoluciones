@@ -10,89 +10,34 @@ import {
 import { ROUTE_ROLES } from "@/constants/permissions";
 import { requireRole } from "@/lib/auth/require-user";
 import {
+  buildListHref,
+  formatDate,
+  one,
+  paginationItems,
+  validUuid,
+} from "@/lib/list-page";
+import {
   getReportesCargaDetails,
   getReportesCargaMetrics,
   REPORTE_CARGA_PAGE_SIZE,
   searchReportesCarga,
 } from "@/repositories/reportes-carga";
 
-type Props = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
-function one(value: string | string[] | undefined): string {
-  return typeof value === "string" ? value : "";
-}
-
-function validUuid(value: string): boolean {
-  return /^[0-9a-f-]{36}$/i.test(value);
-}
-
-function preserve(
+const preserve = (
   params: Record<string, string>,
   page: number,
   extra?: Record<string, string>,
-) {
-  const query = new URLSearchParams();
+) => buildListHref("/reportes-carga", params, page, extra);
 
-  for (const [key, value] of Object.entries(params)) {
-    if (value) query.set(key, value);
-  }
-
-  if (page > 1) query.set("page", String(page));
-
-  for (const [key, value] of Object.entries(extra ?? {})) {
-    if (value) query.set(key, value);
-  }
-
-  const text = query.toString();
-  return text ? `?${text}` : "/reportes-carga";
-}
-
-function formatDate(value: string | null | undefined): string {
-  if (!value) return "-";
-
-  return new Intl.DateTimeFormat("es-CR", {
-    dateStyle: "medium",
-  }).format(new Date(value));
-}
+type Props = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
 
 const LOAD_STATE_LABELS: Record<string, string> = {
   recibido_muelle: "Recibido en muelle",
   pendiente_redespacho: "Pendiente de envio",
   redespachado: "Enviado",
 };
-
-function paginationItems(
-  currentPage: number,
-  totalPages: number,
-): Array<number | "ellipsis"> {
-  if (totalPages <= 7) {
-    return Array.from({ length: totalPages }, (_, index) => index + 1);
-  }
-
-  const pages = Array.from(
-    new Set(
-      [1, currentPage - 1, currentPage, currentPage + 1, totalPages].filter(
-        (value) => value >= 1 && value <= totalPages,
-      ),
-    ),
-  ).sort((a, b) => a - b);
-
-  const result: Array<number | "ellipsis"> = [];
-
-  pages.forEach((value, index) => {
-    const previous = pages[index - 1];
-
-    if (index > 0 && previous !== undefined && value - previous > 1) {
-      result.push("ellipsis");
-    }
-
-    result.push(value);
-  });
-
-  return result;
-}
 
 export default async function ReportesCargaPage({ searchParams }: Props) {
   const profile = await requireRole(ROUTE_ROLES["/reportes-carga"]);

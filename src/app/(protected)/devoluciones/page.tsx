@@ -13,6 +13,13 @@ import {
 import { ROUTE_ROLES } from "@/constants/permissions";
 import { requireRole } from "@/lib/auth/require-user";
 import {
+  buildListHref,
+  formatDate,
+  one,
+  paginationItems,
+  validUuid,
+} from "@/lib/list-page";
+import {
   getDevolucionDetail,
   getDevolucionFilteredCount,
   getDevolucionStateMetrics,
@@ -22,38 +29,15 @@ import {
   type DevolucionMaterialRow,
 } from "@/repositories/devoluciones";
 
-type Props = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
-function one(value: string | string[] | undefined): string {
-  return typeof value === "string" ? value : "";
-}
-
-function validUuid(value: string): boolean {
-  return /^[0-9a-f-]{36}$/i.test(value);
-}
-
-function buildQuery(
+const buildQuery = (
   filters: Record<string, string>,
   page: number,
   extra?: Record<string, string>,
-) {
-  const query = new URLSearchParams();
+) => buildListHref("/devoluciones", filters, page, extra);
 
-  for (const [key, value] of Object.entries(filters)) {
-    if (value) query.set(key, value);
-  }
-
-  if (page > 1) query.set("page", String(page));
-
-  for (const [key, value] of Object.entries(extra ?? {})) {
-    if (value) query.set(key, value);
-  }
-
-  const text = query.toString();
-  return text ? `?${text}` : "/devoluciones";
-}
+type Props = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
 
 const STATE_LABELS: Record<string, string> = {
   pendiente_entrega: "Pendiente de entrega",
@@ -64,14 +48,6 @@ const STATE_LABELS: Record<string, string> = {
   cerrada: "Cerrada",
 };
 
-function formatDate(value: string | null | undefined): string {
-  if (!value) return "-";
-
-  return new Intl.DateTimeFormat("es-CR", {
-    dateStyle: "medium",
-  }).format(new Date(value));
-}
-
 function groupMaterials(rows: DevolucionMaterialRow[]) {
   const map = new Map<string, DevolucionMaterialRow[]>();
 
@@ -80,37 +56,6 @@ function groupMaterials(rows: DevolucionMaterialRow[]) {
   }
 
   return map;
-}
-
-function paginationItems(
-  currentPage: number,
-  totalPages: number,
-): Array<number | "ellipsis"> {
-  if (totalPages <= 7) {
-    return Array.from({ length: totalPages }, (_, index) => index + 1);
-  }
-
-  const pages = Array.from(
-    new Set(
-      [1, currentPage - 1, currentPage, currentPage + 1, totalPages].filter(
-        (value) => value >= 1 && value <= totalPages,
-      ),
-    ),
-  ).sort((a, b) => a - b);
-
-  const result: Array<number | "ellipsis"> = [];
-
-  pages.forEach((value, index) => {
-    const previous = pages[index - 1];
-
-    if (index > 0 && previous !== undefined && value - previous > 1) {
-      result.push("ellipsis");
-    }
-
-    result.push(value);
-  });
-
-  return result;
 }
 
 export default async function DevolucionesPage({ searchParams }: Props) {

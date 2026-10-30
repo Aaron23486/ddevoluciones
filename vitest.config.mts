@@ -17,6 +17,7 @@ export default defineConfig({
         "src/domain/**",
         "src/lib/cn.ts",
         "src/lib/dashboard-interaction.ts",
+        "src/lib/list-page.ts",
         "src/lib/notifications/**",
         "src/lib/security/**",
         "src/lib/supabase/cookie-options.ts",
